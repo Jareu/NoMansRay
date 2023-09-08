@@ -156,12 +156,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="graphics.cpp" />
+    <ClCompile Include="maths.cpp" />
     <ClCompile Include="NoMansRay.cpp" />
     <ClCompile Include="Object.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h" />
     <ClInclude Include="graphics.h" />
+    <ClInclude Include="maths.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="Vector2.h" />
