@@ -10,6 +10,11 @@
 #include <cstdint>
 
 #include "Vector2.h"
+#include "Vector3.h"
+
+typedef float decimal; // so that floating point precision can be changed easily
+constexpr decimal ZERO_DECIMAL = static_cast<decimal>(0.0);
+constexpr decimal ONE_DECIMAL = static_cast<decimal>(1.0);
 
 enum RENDER_RESULT {
 	RENDER_SUCCESS = 0,
