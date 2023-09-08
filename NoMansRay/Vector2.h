@@ -54,7 +54,7 @@ public:
 	template <typename B>
 	const T operator^(const Vector2<B>& rhs) const {
 		static_assert(std::is_arithmetic<B>::value, "RHS must be numeric type for operator +");
-		const T cross_product = this->x_ * static_cast<T> (rhs.y_) - this->y_ * static_cast<T> (rhs.x_);
+		const T cross_product = this->x_ * static_cast<T> (rhs.y()) - this->y_ * static_cast<T> (rhs.x());
 		return cross_product;
 	}
 
@@ -63,8 +63,8 @@ public:
 	const Vector2<T> operator+(const Vector2<B>& rhs) const {
 		static_assert(std::is_arithmetic<B>::value, "RHS must be numeric type for operator +");
 		return Vector2<T>{
-			this->x_ + static_cast<T> (rhs.x_),
-				this->y_ + static_cast<T> (rhs.y_)
+			this->x_ + static_cast<T> (rhs.x()),
+				this->y_ + static_cast<T> (rhs.y())
 		};
 	}
 
@@ -72,8 +72,8 @@ public:
 	template <typename B>
 	Vector2<T>& operator+=(const Vector2<B>& rhs) {
 		static_assert(std::is_arithmetic<B>::value, "RHS must be numeric type for operator -");
-		this->x_ = this->x_ + static_cast<T> (rhs.x_);
-		this->y_ = this->y_ + static_cast<T> (rhs.y_);
+		this->x_ = this->x_ + static_cast<T> (rhs.x());
+		this->y_ = this->y_ + static_cast<T> (rhs.y());
 		return *this;
 	}
 
@@ -82,8 +82,8 @@ public:
 	const Vector2<T> operator-(const Vector2<B>& rhs) const {
 		static_assert(std::is_arithmetic<B>::value, "RHS must be numeric type for operator -");
 		return Vector2<T>{
-			this->x_ - static_cast<T> (rhs.x_),
-				this->y_ - static_cast<T> (rhs.y_)
+			this->x_ - static_cast<T> (rhs.x()),
+				this->y_ - static_cast<T> (rhs.y())
 		};
 	}
 
@@ -91,8 +91,8 @@ public:
 	template <typename B>
 	Vector2<T>& operator-=(const Vector2<B>& rhs) {
 		static_assert(std::is_arithmetic<B>::value, "RHS must be numeric type for operator -");
-		this->x_ = this->x_ - static_cast<T> (rhs.x_);
-		this->y_ = this->y_ - static_cast<T> (rhs.y_);
+		this->x_ = this->x_ - static_cast<T> (rhs.x());
+		this->y_ = this->y_ - static_cast<T> (rhs.y());
 		return *this;
 	}
 
@@ -109,8 +109,8 @@ public:
 	// multiplication with vector2
 	const Vector2<T> operator*(const Vector2<T>& rhs) const {
 		return Vector2<T>{
-			this->x_* static_cast<T> (rhs.x_),
-				this->y_* static_cast<T> (rhs.y_)
+			this->x_* static_cast<T> (rhs.x()),
+				this->y_* static_cast<T> (rhs.y())
 		};
 	}
 
@@ -136,8 +136,8 @@ public:
 	// division with vector2
 	const Vector2<T> operator/(const Vector2<T>& rhs) const {
 		return Vector2<T>{
-			this->x_ / static_cast<T> (rhs.x_),
-				this->y_ / static_cast<T> (rhs.y_)
+			this->x_ / static_cast<T> (rhs.x()),
+				this->y_ / static_cast<T> (rhs.y())
 		};
 	}
 
