@@ -14,11 +14,14 @@
 #include "types.h"
 #include "graphics.h"
 
+#include "Universe.h"
+
 int		main();
 void	handleEvents();
-void	update(double dt);
-float	get_elapsed_time();
+void	update();
 int		render();
+
+auto universe = std::make_unique<Universe>(1234);
 
 int main()
 {
@@ -67,8 +70,8 @@ int main()
 
 	while (is_running) {
 		handleEvents();
-		float elapsed_time = get_elapsed_time();
-		update(elapsed_time);
+		update();
+
 		if (render() == RENDER_RESULT::RENDER_FAILED) {
 			is_running = false;
 			break;
@@ -87,14 +90,10 @@ int main()
 	return 0;
 }
 
-float get_elapsed_time()
+// Do physics
+void update()
 {
-	float elapsed_time;
-	auto elapsed = std::chrono::high_resolution_clock::now() - last_frame_time;
-	int64_t microseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count();
-	last_frame_time = std::chrono::high_resolution_clock::now();
-	elapsed_time = static_cast<float>(microseconds / 1000000.0);
-	return elapsed_time;
+	universe->tick();
 }
 
 // Do physics
