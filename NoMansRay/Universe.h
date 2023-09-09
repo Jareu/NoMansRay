@@ -21,10 +21,10 @@ public:
 	Universe(const int seed);
 	~Universe() = default;
 
-	template <class T>
+	template <class T = Actor>
 	Actor* spawnActor(const SpawnParameters& spawn_parameters);
 
-	template <class T>
+	template <class T = Actor>
 	Actor* spawnActor();
 
 	ActorIdMap& getActors();
