@@ -15,6 +15,7 @@
 #include "graphics.h"
 
 #include "Universe.h"
+#include "Asteroid.h"
 
 int		main();
 void	handleEvents();
@@ -68,6 +69,21 @@ int main()
 	SDL_ShowWindow(window);
 	SDL_RenderFillRect(renderer, NULL);
 
+	auto asteroid1 = universe->spawnActor<Asteroid>();
+	auto asteroid2 = universe->spawnActor<Asteroid>();
+	auto asteroid3 = universe->spawnActor<Asteroid>();
+
+	asteroid1->setLinearVelocity(Vector2<decimal>(0.4f, 0.2f));
+	asteroid1->setAngularVelocity(-0.1f);
+
+	asteroid2->setLinearVelocity(Vector2<decimal>(0.1f, 0.2f));
+	asteroid2->setAngularVelocity(0.15f);
+	asteroid2->setPosition(Vector2<decimal>{-300.0, 300.0});
+
+	asteroid3->setLinearVelocity(Vector2<decimal>(0.5f, -0.4f));
+	asteroid3->setAngularVelocity(0.2f);
+	asteroid3->setPosition(Vector2<decimal>{300.0, 300.0});
+
 	while (is_running) {
 		handleEvents();
 		update();
@@ -118,7 +134,6 @@ void renderActors()
 
 		it++;
 	}
-
 }
 
 // Render the Game
