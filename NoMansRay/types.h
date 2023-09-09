@@ -93,3 +93,17 @@ typedef struct _Spring
 	float damping = SPRING_D;
 	float nominal_length{ 0.f };
 } Spring;
+
+typedef struct _SpawnParameters {
+	Vector2<decimal> position;
+	Vector2<decimal> linear_velocity;
+	decimal rotation_radians;
+	decimal angular_velocity;
+
+} SpawnParameters;
+
+enum class eGraphicType {
+	NONE,
+	VECTOR,
+	BITMAP
+};

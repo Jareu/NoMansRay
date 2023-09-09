@@ -161,6 +161,8 @@
     <ClCompile Include="maths.cpp" />
     <ClCompile Include="NoMansRay.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="SpaceShip.cpp" />
+    <ClCompile Include="Thruster.cpp" />
     <ClCompile Include="Universe.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -170,6 +172,8 @@
     <ClInclude Include="graphics.h" />
     <ClInclude Include="maths.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="SpaceShip.h" />
+    <ClInclude Include="Thruster.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="Universe.h" />
     <ClInclude Include="Vector2.h" />
