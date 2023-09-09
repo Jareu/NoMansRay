@@ -14,6 +14,7 @@
 #include "types.h"
 #include "graphics.h"
 
+#include <box2d.h>
 #include "Universe.h"
 #include "Asteroid.h"
 
@@ -23,6 +24,8 @@ void	update();
 int		render();
 
 auto universe = std::make_unique<Universe>(1234);
+b2Vec2 gravity_{ 0.0f, 9.814f };
+b2World physics = b2World(gravity_);
 
 int main()
 {
@@ -84,9 +87,79 @@ int main()
 	asteroid3->setAngularVelocity(0.2f);
 	asteroid3->setPosition(Vector2<decimal>{300.0, 300.0});
 
+
+	// Ground box
+	float ground_box_height_half = 10.f;
+
+	SpawnParameters ground_params{
+		Vector2<decimal> {ZERO_DECIMAL, WINDOW_HEIGHT_HALF_F - ground_box_height_half - 1.f},
+		Vector2<decimal> {ZERO_DECIMAL, ZERO_DECIMAL},
+		ZERO_DECIMAL,
+		ZERO_DECIMAL
+	};
+
+	auto ground_box = universe->spawnActor(ground_params);
+	ground_box->addVertex({ -WINDOW_WIDTH_HALF_F + 1.f, -ground_box_height_half });
+	ground_box->addVertex({ WINDOW_WIDTH_HALF_F - 1.f, -ground_box_height_half });
+	ground_box->addVertex({ WINDOW_WIDTH_HALF_F - 1.f, ground_box_height_half });
+	ground_box->addVertex({ -WINDOW_WIDTH_HALF_F + 1.f, ground_box_height_half });
+	ground_box->addLine(0, 1);
+	ground_box->addLine(1, 2);
+	ground_box->addLine(2, 3);
+	ground_box->addLine(3, 0);
+
+	b2BodyDef* ground_body_def_ = new b2BodyDef();
+	ground_body_def_->position.Set(ground_params.position.x(), ground_params.position.y());
+
+	auto groundBody = physics.CreateBody(ground_body_def_);
+
+	auto groundBox = new b2PolygonShape();
+	groundBox->SetAsBox(WINDOW_WIDTH_HALF_F, ground_box_height_half);
+	groundBody->CreateFixture(groundBox, 0.0f);
+
+	// Dynamic Box
+
+	float box_size_half = 30.f;
+	auto box = universe->spawnActor();
+	box->addVertex({ -box_size_half, -box_size_half });
+	box->addVertex({ -box_size_half, box_size_half });
+	box->addVertex({ box_size_half, box_size_half });
+	box->addVertex({ box_size_half, -box_size_half });
+	box->addLine(0, 1);
+	box->addLine(1, 2);
+	box->addLine(2, 3);
+	box->addLine(3, 0);
+
+	b2BodyDef* box_body_def_ = new b2BodyDef();
+	box_body_def_->type = b2_dynamicBody;
+	box_body_def_->position.Set(0.f, 0.f);
+	box_body_def_->angle = M_PI_4 / 6;
+	auto box_body = physics.CreateBody(box_body_def_);
+
+	auto dynamicBox = new b2PolygonShape();
+	dynamicBox->SetAsBox(box_size_half, box_size_half);
+
+	auto fixtureDef = new b2FixtureDef();
+	fixtureDef->shape = dynamicBox;
+	fixtureDef->density = 1.0f;
+	fixtureDef->friction = 0.3f;
+	fixtureDef->restitution = 0.5f;
+
+	box_body->CreateFixture(fixtureDef);
+
+	int32 velocityIterations = 6;
+	int32 positionIterations = 2;
+	float timestep = 1.f / 500.f;
+
 	while (is_running) {
 		handleEvents();
 		update();
+
+		physics.Step(timestep, velocityIterations, positionIterations);
+		b2Vec2 position = box_body->GetPosition();
+		float angle = box_body->GetAngle();
+		box->setPosition({ position.x, position.y });
+		box->setRotation({ angle });
 
 		if (render() == RENDER_RESULT::RENDER_FAILED) {
 			is_running = false;
