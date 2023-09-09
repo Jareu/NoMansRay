@@ -96,9 +96,28 @@ void update()
 	universe->tick();
 }
 
-// Do physics
-void update(double dt)
+void renderActors()
 {
+	auto& actors = universe->getActors();
+	ActorIdMap::iterator it = actors.begin();
+
+	while (it != actors.end()) {
+		auto& actor = it->second;
+
+		if (!actor) {
+			continue;
+		}
+
+		for (const auto& line : actor->getLines()) {
+			renderLine(
+				WINDOW_SIZE_HALF_F + actor->getPosition() + actor->getVertexById(line.first),
+				WINDOW_SIZE_HALF_F + actor->getPosition() + actor->getVertexById(line.second),
+				RGB{ 220, 220, 220 }
+			);
+		}
+
+		it++;
+	}
 
 }
 
@@ -112,8 +131,7 @@ int render()
 
 	SDL_SetRenderDrawColor(renderer, 220, 220, 220, SDL_ALPHA_OPAQUE);
 
-	// draw line
-	renderLine(Vector2{0,0}, Vector2{ WINDOW_WIDTH, WINDOW_HEIGHT }, RGB{ 220, 220, 220 });
+	renderActors();
 
 	SDL_RenderPresent(renderer);
 
