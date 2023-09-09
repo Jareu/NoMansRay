@@ -1,5 +1,6 @@
 #pragma once
 #include <chrono>
+#include "SDL.h"
 #include "types.h"
 
 #define TWOPI 6.2831853071f
