@@ -5,4 +5,5 @@
 class SpaceShip : public Actor
 {
 protected:
+	std::vector<Thruster> thrusters_{};
 };
