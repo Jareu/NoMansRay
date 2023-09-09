@@ -14,11 +14,14 @@
 #include "types.h"
 #include "graphics.h"
 
+#include "Universe.h"
+
 int		main();
 void	handleEvents();
-void	update(double dt);
-float	get_elapsed_time();
+void	update();
 int		render();
+
+auto universe = std::make_unique<Universe>(1234);
 
 int main()
 {
@@ -67,8 +70,8 @@ int main()
 
 	while (is_running) {
 		handleEvents();
-		float elapsed_time = get_elapsed_time();
-		update(elapsed_time);
+		update();
+
 		if (render() == RENDER_RESULT::RENDER_FAILED) {
 			is_running = false;
 			break;
@@ -87,19 +90,34 @@ int main()
 	return 0;
 }
 
-float get_elapsed_time()
+// Do physics
+void update()
 {
-	float elapsed_time;
-	auto elapsed = std::chrono::high_resolution_clock::now() - last_frame_time;
-	int64_t microseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count();
-	last_frame_time = std::chrono::high_resolution_clock::now();
-	elapsed_time = static_cast<float>(microseconds / 1000000.0);
-	return elapsed_time;
+	universe->tick();
 }
 
-// Do physics
-void update(double dt)
+void renderActors()
 {
+	auto& actors = universe->getActors();
+	ActorIdMap::iterator it = actors.begin();
+
+	while (it != actors.end()) {
+		auto& actor = it->second;
+
+		if (!actor) {
+			continue;
+		}
+
+		for (const auto& line : actor->getLines()) {
+			renderLine(
+				WINDOW_SIZE_HALF_F + actor->getPosition() + actor->getVertexById(line.first),
+				WINDOW_SIZE_HALF_F + actor->getPosition() + actor->getVertexById(line.second),
+				RGB{ 220, 220, 220 }
+			);
+		}
+
+		it++;
+	}
 
 }
 
@@ -113,8 +131,7 @@ int render()
 
 	SDL_SetRenderDrawColor(renderer, 220, 220, 220, SDL_ALPHA_OPAQUE);
 
-	// draw line
-	renderLine(Vector2{0,0}, Vector2{ WINDOW_WIDTH, WINDOW_HEIGHT }, RGB{ 220, 220, 220 });
+	renderActors();
 
 	SDL_RenderPresent(renderer);
 
