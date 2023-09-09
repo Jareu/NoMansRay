@@ -101,3 +101,9 @@ typedef struct _SpawnParameters {
 	decimal angular_velocity;
 
 } SpawnParameters;
+
+enum class eGraphicType {
+	NONE,
+	VECTOR,
+	BITMAP
+};
