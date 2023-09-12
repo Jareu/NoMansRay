@@ -15,6 +15,10 @@ protected:
 	eGraphicType graphic_type_;
 	bool vertex_transforms_valid_;
 
+	std::unique_ptr<b2BodyDef> physics_body_def_;
+	std::unique_ptr<b2Body> physics_body_;
+	std::unique_ptr<b2PolygonShape> physics_shape_;
+
 public:
 	Actor() = delete;
 	Actor(Universe& universe);

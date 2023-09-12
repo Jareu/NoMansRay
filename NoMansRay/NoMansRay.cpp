@@ -24,8 +24,6 @@ void	update();
 int		render();
 
 auto universe = std::make_unique<Universe>(1234);
-b2Vec2 gravity_{ 0.0f, 9.814f };
-b2World physics = b2World(gravity_);
 
 int main()
 {
@@ -111,13 +109,13 @@ int main()
 	b2BodyDef* ground_body_def_ = new b2BodyDef();
 	ground_body_def_->position.Set(ground_params.position.x(), ground_params.position.y());
 
-	auto groundBody = physics.CreateBody(ground_body_def_);
+	auto groundBody = universe->getPhysics()->CreateBody(ground_body_def_);
 
 	auto groundBox = new b2PolygonShape();
 	groundBox->SetAsBox(WINDOW_WIDTH_HALF_F, ground_box_height_half);
 	groundBody->CreateFixture(groundBox, 0.0f);
 
-	// Dynamic Box
+	// Dynamic Complex Object
 
 	float box_size_half = 30.f;
 	auto box = universe->spawnActor();
@@ -134,28 +132,37 @@ int main()
 	box_body_def_->type = b2_dynamicBody;
 	box_body_def_->position.Set(0.f, 0.f);
 	box_body_def_->angle = M_PI_4 / 6;
-	auto box_body = physics.CreateBody(box_body_def_);
+	auto box_body = universe->getPhysics()->CreateBody(box_body_def_);
 
-	auto dynamicBox = new b2PolygonShape();
-	dynamicBox->SetAsBox(box_size_half, box_size_half);
+	auto polya = new b2PolygonShape();
+	b2Vec2 poly_hulla[3] = {{0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}};
+	polya->Set(poly_hulla, 3);
 
-	auto fixtureDef = new b2FixtureDef();
-	fixtureDef->shape = dynamicBox;
-	fixtureDef->density = 1.0f;
-	fixtureDef->friction = 0.3f;
-	fixtureDef->restitution = 0.5f;
+	auto polyb = new b2PolygonShape();
+	b2Vec2 poly_hullb[3] = { {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f} };
+	polyb->Set(poly_hullb, 3);
 
-	box_body->CreateFixture(fixtureDef);
+	auto fixtureDefa = new b2FixtureDef();
+	fixtureDefa->shape = polya;
+	fixtureDefa->density = 1.0f;
+	fixtureDefa->friction = 0.3f;
+	fixtureDefa->restitution = 0.5f;
 
-	int32 velocityIterations = 6;
-	int32 positionIterations = 2;
+	auto fixtureDefb = new b2FixtureDef();
+	fixtureDefb->shape = polyb;
+	fixtureDefb->density = 1.0f;
+	fixtureDefb->friction = 0.3f;
+	fixtureDefb->restitution = 0.5f;
+
+	box_body->CreateFixture(fixtureDefa);
+	box_body->CreateFixture(fixtureDefb);
+
 	float timestep = 1.f / 500.f;
 
 	while (is_running) {
 		handleEvents();
 		update();
 
-		physics.Step(timestep, velocityIterations, positionIterations);
 		b2Vec2 position = box_body->GetPosition();
 		float angle = box_body->GetAngle();
 		box->setPosition({ position.x, position.y });

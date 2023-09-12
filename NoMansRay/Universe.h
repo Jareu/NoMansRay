@@ -2,6 +2,7 @@
 #include <unordered_map>
 #include <chrono>
 #include <random>
+#include <box2d.h>
 
 #include "Actor.h"
 #include "types.h"
@@ -16,6 +17,9 @@ private:
 	ActorIdMap actor_map_{};
 	std::chrono::system_clock::time_point last_tick_time_;
 	int RANDOM_SEED;
+	PhysicsSettings physics_settings_;
+	b2World physics;
+
 public:
 	Universe() = delete;
 	Universe(const int seed);
@@ -28,6 +32,8 @@ public:
 	Actor* spawnActor();
 
 	ActorIdMap& getActors();
+
+	b2World* getPhysics();
 
 	void tick();
 	void updatePhysics();

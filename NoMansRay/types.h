@@ -107,3 +107,9 @@ enum class eGraphicType {
 	VECTOR,
 	BITMAP
 };
+
+typedef struct _PhysicsSettings {
+	int32 velocity_iterations;
+	int32 position_iterations;
+	b2Vec2 gravity;
+} PhysicsSettings;
