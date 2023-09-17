@@ -1,4 +1,4 @@
-template <class T = Actor>
+template <class T>
 Actor* Universe::spawnActor(const SpawnParameters& spawn_parameters)
 {
 	static_assert(std::is_convertible<T*, Actor*>::value, "Derived must inherit Base as public");
@@ -10,7 +10,7 @@ Actor* Universe::spawnActor(const SpawnParameters& spawn_parameters)
 	return new_actor;
 }
 
-template <class T = Actor>
+template <class T>
 Actor* Universe::spawnActor()
 {
 	auto default_parameters = SpawnParameters{
