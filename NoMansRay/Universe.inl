@@ -1,4 +1,3 @@
-
 template <class T>
 Actor* Universe::spawnActor(const SpawnParameters& spawn_parameters)
 {

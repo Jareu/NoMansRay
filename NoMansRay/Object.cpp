@@ -15,7 +15,7 @@ void Object::beginPlay()
 
 }
 
-void Object::tick(const decimal seconds_elapsed)
+void Object::tick(decimal seconds_elapsed)
 {
 
 }
@@ -39,6 +39,18 @@ void Object::setPosition(const Vector2<decimal>& new_position)
 	position_ = new_position;
 }
 
+void Object::setPosition(decimal x, decimal y)
+{
+	position_.set_x(x);
+	position_.set_y(y);
+}
+
+void Object::setLinearVelocity(decimal x, decimal y)
+{
+	linear_velocity_.set_x(x);
+	linear_velocity_.set_y(y);
+}
+
 void Object::setLinearVelocity(const Vector2<decimal>& new_linear_velocity)
 {
 	linear_velocity_ = new_linear_velocity;
@@ -52,6 +64,11 @@ void Object::setRotation(const decimal& new_rotation)
 void Object::setAngularVelocity(const decimal& new_angular_velocity)
 {
 	angular_velocity_ = new_angular_velocity;
+}
+
+void Object::setName(const std::string& name)
+{
+	name_ = name;
 }
 
 // Getters
@@ -73,4 +90,9 @@ const decimal& Object::getRotation()
 const decimal& Object::getAngularVelocity()
 {
 	return angular_velocity_;
+}
+
+const std::string Object::getName()
+{
+	return name_;
 }

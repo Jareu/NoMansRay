@@ -1,5 +1,9 @@
 #pragma once
 #include <chrono>
+#pragma warning(push, 0)
+#pragma warning( disable : 4468 )
+#include "SDL.h"
+#pragma warning(pop)
 #include "types.h"
 
 #define TWOPI 6.2831853071f
@@ -9,6 +13,9 @@ inline bool is_running = false;
 inline bool is_fullscreen = true;
 inline SDL_Renderer* renderer = nullptr;
 inline SDL_Window* window = nullptr;
+
+inline constexpr size_t BOX2D_MAX_VERTICES_IN_POLYGON = 8;
+inline constexpr float PIXELS_PER_METER = 50.f;
 
 inline int WINDOW_WIDTH = 1920;
 inline int WINDOW_HEIGHT = 1080;
