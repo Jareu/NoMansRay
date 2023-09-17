@@ -1,6 +1,9 @@
 #pragma once
 #include <chrono>
+#pragma warning(push, 0)
+#pragma warning( disable : 4468 )
 #include "SDL.h"
+#pragma warning(pop)
 #include "types.h"
 
 #define TWOPI 6.2831853071f

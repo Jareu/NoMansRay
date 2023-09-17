@@ -1,6 +1,7 @@
 // NoMansRay.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 #pragma warning(push, 0)
+#pragma warning( disable : 4468 )
 #include "SDL.h"
 #include "SDL_image.h"
 #include "SDL_ttf.h"
