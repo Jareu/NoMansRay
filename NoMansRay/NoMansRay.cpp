@@ -109,25 +109,23 @@ int main()
 	ground_box->addLine(1, 2);
 	ground_box->addLine(2, 3);
 	ground_box->addLine(3, 0);
-	ground_box->initializePhysics(b2BodyType::b2_staticBody, 0.f, 0.f, 0.f);
+	ground_box->initializePhysics(b2BodyType::b2_staticBody, 0.f, 0.7f, 0.f);
 
 	// Dynamic Complex Object
 	float box_size_half = 30.f;
 	auto box = universe->spawnActor();
 	box->setName("Bouncy-Box");
 	box->addVertex({ -box_size_half, -box_size_half });
-	box->addVertex({ -box_size_half, box_size_half });
-	box->addVertex({ box_size_half, box_size_half });
 	box->addVertex({ box_size_half, -box_size_half });
+	box->addVertex({ box_size_half, box_size_half });
+	box->addVertex({ -box_size_half, box_size_half });
 	box->addLine(0, 1);
 	box->addLine(1, 2);
 	box->addLine(2, 3);
 	box->addLine(3, 0);
 	box->setPosition(0.f, 0.f);
 	box->setRotation(M_PI_4 / 6);
-	box->initializePhysics(b2BodyType::b2_dynamicBody);
-
-	float timestep = 1.f / 500.f;
+	box->initializePhysics(b2BodyType::b2_dynamicBody, 50.f, 0.4f, 0.7f);
 
 	while (is_running) {
 		handleEvents();
@@ -171,8 +169,8 @@ void renderActors()
 
 		for (const auto& line : actor->getLines()) {
 			renderLine(
-				WINDOW_SIZE_HALF_F + actor->getPosition() + actor->getVertexById(line.first),
-				WINDOW_SIZE_HALF_F + actor->getPosition() + actor->getVertexById(line.second),
+				WINDOW_SIZE_HALF_F + actor->getPosition() + *actor->getVertexById(line.first),
+				WINDOW_SIZE_HALF_F + actor->getPosition() + *actor->getVertexById(line.second),
 				RGB{ 220, 220, 220 }
 			);
 		}
