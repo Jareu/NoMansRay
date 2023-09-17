@@ -25,7 +25,9 @@ public:
 	
 	// Setters
 	virtual void setPosition(const Vector2<decimal>& new_position);
+	virtual void setPosition(decimal x, decimal y);
 	virtual void setLinearVelocity(const Vector2<decimal>& new_linear_velocity);
+	virtual void setLinearVelocity(decimal x, decimal y);
 	virtual void setRotation(const decimal& new_rotation);
 	virtual void setAngularVelocity(const decimal& new_angular_velocity);
 

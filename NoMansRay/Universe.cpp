@@ -29,6 +29,7 @@ void Universe::tick()
 		auto& object = it->second;
 
 		if (object) {
+			object->updatePhysics();
 			object->tick(seconds_elapsed);
 
 			object->setRotation(object->getRotation() + object->getAngularVelocity() * seconds_elapsed);
@@ -39,11 +40,6 @@ void Universe::tick()
 	}
 
 	last_tick_time_ = now;
-}
-
-void Universe::updatePhysics()
-{
-
 }
 
 void Universe::endExistance()

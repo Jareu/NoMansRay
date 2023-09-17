@@ -36,7 +36,6 @@ public:
 	b2World* getPhysics();
 
 	void tick();
-	void updatePhysics();
 	void endExistance();
 };
 

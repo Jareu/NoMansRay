@@ -39,6 +39,23 @@ void Object::setPosition(const Vector2<decimal>& new_position)
 	position_ = new_position;
 }
 
+void Object::setPosition(decimal x, decimal y)
+{
+	position_.set_x(x);
+	position_.set_y(y);
+}
+
+void Object::setLinearVelocity(const Vector2<decimal>& new_linear_velocity)
+{
+	linear_velocity_ = new_linear_velocity;
+}
+
+void Object::setLinearVelocity(decimal x, decimal y)
+{
+	linear_velocity_.set_x(x);
+	linear_velocity_.set_y(y);
+}
+
 void Object::setLinearVelocity(const Vector2<decimal>& new_linear_velocity)
 {
 	linear_velocity_ = new_linear_velocity;

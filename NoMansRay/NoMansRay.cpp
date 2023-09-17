@@ -105,18 +105,9 @@ int main()
 	ground_box->addLine(1, 2);
 	ground_box->addLine(2, 3);
 	ground_box->addLine(3, 0);
-
-	b2BodyDef* ground_body_def_ = new b2BodyDef();
-	ground_body_def_->position.Set(ground_params.position.x(), ground_params.position.y());
-
-	auto groundBody = universe->getPhysics()->CreateBody(ground_body_def_);
-
-	auto groundBox = new b2PolygonShape();
-	groundBox->SetAsBox(WINDOW_WIDTH_HALF_F, ground_box_height_half);
-	groundBody->CreateFixture(groundBox, 0.0f);
+	ground_box->initializePhysics(b2BodyType::b2_staticBody, 0.f, 0.f, 0.f);
 
 	// Dynamic Complex Object
-
 	float box_size_half = 30.f;
 	auto box = universe->spawnActor();
 	box->addVertex({ -box_size_half, -box_size_half });
@@ -127,46 +118,15 @@ int main()
 	box->addLine(1, 2);
 	box->addLine(2, 3);
 	box->addLine(3, 0);
-
-	b2BodyDef* box_body_def_ = new b2BodyDef();
-	box_body_def_->type = b2_dynamicBody;
-	box_body_def_->position.Set(0.f, 0.f);
-	box_body_def_->angle = M_PI_4 / 6;
-	auto box_body = universe->getPhysics()->CreateBody(box_body_def_);
-
-	auto polya = new b2PolygonShape();
-	b2Vec2 poly_hulla[3] = {{0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f}};
-	polya->Set(poly_hulla, 3);
-
-	auto polyb = new b2PolygonShape();
-	b2Vec2 poly_hullb[3] = { {0.f, 0.f}, {0.f, 0.f}, {0.f, 0.f} };
-	polyb->Set(poly_hullb, 3);
-
-	auto fixtureDefa = new b2FixtureDef();
-	fixtureDefa->shape = polya;
-	fixtureDefa->density = 1.0f;
-	fixtureDefa->friction = 0.3f;
-	fixtureDefa->restitution = 0.5f;
-
-	auto fixtureDefb = new b2FixtureDef();
-	fixtureDefb->shape = polyb;
-	fixtureDefb->density = 1.0f;
-	fixtureDefb->friction = 0.3f;
-	fixtureDefb->restitution = 0.5f;
-
-	box_body->CreateFixture(fixtureDefa);
-	box_body->CreateFixture(fixtureDefb);
+	box->setPosition(0.f, 0.f);
+	box->setRotation(M_PI_4 / 6);
+	box->initializePhysics(b2BodyType::b2_dynamicBody);
 
 	float timestep = 1.f / 500.f;
 
 	while (is_running) {
 		handleEvents();
 		update();
-
-		b2Vec2 position = box_body->GetPosition();
-		float angle = box_body->GetAngle();
-		box->setPosition({ position.x, position.y });
-		box->setRotation({ angle });
 
 		if (render() == RENDER_RESULT::RENDER_FAILED) {
 			is_running = false;
