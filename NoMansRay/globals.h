@@ -14,6 +14,9 @@ inline bool is_fullscreen = true;
 inline SDL_Renderer* renderer = nullptr;
 inline SDL_Window* window = nullptr;
 
+inline constexpr size_t BOX2D_MAX_VERTICES_IN_POLYGON = 8;
+inline constexpr float PIXELS_PER_METER = 50.f;
+
 inline int WINDOW_WIDTH = 1920;
 inline int WINDOW_HEIGHT = 1080;
 inline int WINDOW_WIDTH_HALF = WINDOW_WIDTH/2;

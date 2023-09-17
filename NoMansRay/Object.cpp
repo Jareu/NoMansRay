@@ -15,7 +15,7 @@ void Object::beginPlay()
 
 }
 
-void Object::tick(const decimal seconds_elapsed)
+void Object::tick(decimal seconds_elapsed)
 {
 
 }
@@ -43,11 +43,6 @@ void Object::setPosition(decimal x, decimal y)
 {
 	position_.set_x(x);
 	position_.set_y(y);
-}
-
-void Object::setLinearVelocity(const Vector2<decimal>& new_linear_velocity)
-{
-	linear_velocity_ = new_linear_velocity;
 }
 
 void Object::setLinearVelocity(decimal x, decimal y)
