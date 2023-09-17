@@ -76,15 +76,17 @@ int main()
 
 	asteroid1->setLinearVelocity(Vector2<decimal>(0.4f, 0.2f));
 	asteroid1->setAngularVelocity(-0.1f);
+	asteroid1->setName("Asteroid_1");
 
 	asteroid2->setLinearVelocity(Vector2<decimal>(0.1f, 0.2f));
 	asteroid2->setAngularVelocity(0.15f);
 	asteroid2->setPosition(Vector2<decimal>{-300.0, 300.0});
+	asteroid2->setName("Asteroid_2");
 
 	asteroid3->setLinearVelocity(Vector2<decimal>(0.5f, -0.4f));
 	asteroid3->setAngularVelocity(0.2f);
 	asteroid3->setPosition(Vector2<decimal>{300.0, 300.0});
-
+	asteroid3->setName("Asteroid_3");
 
 	// Ground box
 	float ground_box_height_half = 10.f;
@@ -93,7 +95,8 @@ int main()
 		Vector2<decimal> {ZERO_DECIMAL, WINDOW_HEIGHT_HALF_F - ground_box_height_half - 1.f},
 		Vector2<decimal> {ZERO_DECIMAL, ZERO_DECIMAL},
 		ZERO_DECIMAL,
-		ZERO_DECIMAL
+		ZERO_DECIMAL,
+		"Ground"
 	};
 
 	auto ground_box = universe->spawnActor(ground_params);
@@ -110,6 +113,7 @@ int main()
 	// Dynamic Complex Object
 	float box_size_half = 30.f;
 	auto box = universe->spawnActor();
+	box->setName("Bouncy-Box");
 	box->addVertex({ -box_size_half, -box_size_half });
 	box->addVertex({ -box_size_half, box_size_half });
 	box->addVertex({ box_size_half, box_size_half });

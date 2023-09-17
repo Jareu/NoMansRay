@@ -71,6 +71,11 @@ void Object::setAngularVelocity(const decimal& new_angular_velocity)
 	angular_velocity_ = new_angular_velocity;
 }
 
+void Object::setName(const std::string& name)
+{
+	name_ = name;
+}
+
 // Getters
 const Vector2<decimal>& Object::getPosition()
 {
@@ -90,4 +95,9 @@ const decimal& Object::getRotation()
 const decimal& Object::getAngularVelocity()
 {
 	return angular_velocity_;
+}
+
+const std::string Object::getName()
+{
+	return name_;
 }

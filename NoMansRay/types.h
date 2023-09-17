@@ -7,6 +7,7 @@
 #include <typeinfo>
 #include <stdint.h>
 #include <math.h>
+#include <string>
 #include <cstdint>
 #include <box2d.h>
 #include "Vector2.h"
@@ -99,7 +100,7 @@ typedef struct _SpawnParameters {
 	Vector2<decimal> linear_velocity;
 	decimal rotation_radians;
 	decimal angular_velocity;
-
+	std::string name;
 } SpawnParameters;
 
 enum class eGraphicType {
