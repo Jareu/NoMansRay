@@ -8,6 +8,7 @@ private:
 	static constexpr uint16_t MIN_RADIUS = 50;
 	static constexpr uint16_t MAX_RADIUS = 150;
 	void generate();
+	void triangulate();
 public:
 	Asteroid() = delete;
 	Asteroid(Universe& universe);

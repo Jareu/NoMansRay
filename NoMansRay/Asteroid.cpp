@@ -8,6 +8,7 @@ Asteroid::Asteroid(Universe& universe) :
 	Actor(universe)
 {}
 
+// Generate 
 void Asteroid::generate()
 {
 	std::vector<int> angle_slices{};
@@ -33,6 +34,13 @@ void Asteroid::generate()
 			static_cast<decimal>(radii[i] * std::sin(angle))
 		});
 	}
+
+	triangulate();
+}
+
+void Asteroid::triangulate()
+{
+
 }
 
 void Asteroid::initialize(const SpawnParameters& spawn_parameters)
