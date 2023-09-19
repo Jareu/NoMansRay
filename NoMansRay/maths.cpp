@@ -11,5 +11,14 @@ Vector2<decimal> maths::rotate(const Vector2<decimal>& vertex, decimal angle_rad
 int maths::random_range(int min, int max)
 {
 	return min + (std::rand() % (max - min + 1));
+}
 
+bool maths::vertex_is_in_circumcenter(const Triangle& triangle, const Vector2<decimal>& vertex_to_test)
+{
+	const auto center_radius_pair = maths::get_circumcenter(triangle);
+	const auto& center = center_radius_pair.first;
+	auto radius = center_radius_pair.second;
+	float distance = sqrt((center.x() - vertex_to_test.x()) * (center.x() - vertex_to_test.x()) + (center.y() - vertex_to_test.y()) * (center.y() - vertex_to_test.y()));
+	bool in_circumcenter = (distance < radius);
+	return in_circumcenter;
 }
