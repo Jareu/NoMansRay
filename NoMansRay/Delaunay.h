@@ -8,9 +8,8 @@
 class Delaunay
 {
 private:
-	const VertexVector& vertices_;
+	VertexVector& vertices_;
 	std::vector<Triangle> triangles_{};
-	VertexVector super_triangle_vertices_ {};
 	Triangle super_triangle_;
 
 	void addVertex(uint32_t vertex_id);
@@ -22,7 +21,7 @@ private:
 	void findMinMaxXY();
 public:
 	Delaunay() = delete;
-	Delaunay(const VertexVector& vertices_);
+	Delaunay(VertexVector& vertices_);
 	~Delaunay() = default;
 	std::vector<Triangle> processTriangulation();
 };

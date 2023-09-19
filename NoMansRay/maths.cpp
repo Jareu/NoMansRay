@@ -16,8 +16,8 @@ int maths::random_range(int min, int max)
 std::pair<Vector2<decimal>, decimal> maths::get_circumcenter(const Triangle& triangle)
 {
 	auto a = triangle.getV1();
-	auto b = triangle.getV1();
-	auto c = triangle.getV1();
+	auto b = triangle.getV2();
+	auto c = triangle.getV3();
 
 	const decimal d = 2 * (a.x() * (b.y() - c.y()) + b.x() * (c.y() - a.y()) + c.x() * (a.y() - b.y()));
 

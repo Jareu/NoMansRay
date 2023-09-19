@@ -2,9 +2,9 @@
 #include "maths.h"
 #include <algorithm>
 
-Delaunay::Delaunay(const VertexVector& vertices_) :
+Delaunay::Delaunay(VertexVector& vertices_) :
     vertices_ { vertices_ },
-    super_triangle_ { super_triangle_vertices_, 0 }
+    super_triangle_ { vertices_, 0 }
 { }
 
 std::vector<Triangle> Delaunay::processTriangulation()
@@ -30,11 +30,12 @@ void Delaunay::createSuperTriangle()
     decimal rectangle_base = std::get<0>(rectangle);
     decimal rectangle_height = std::get<1>(rectangle);
 
-    super_triangle_vertices_.push_back({ origin_x - rectangle_base - offset,  origin_y - offset});
-    super_triangle_vertices_.push_back({ origin_x + rectangle_base + offset, origin_y - offset });
-    super_triangle_vertices_.push_back({ origin_x, origin_y + 2 * rectangle_height + offset });
+    uint32_t id = vertices_.size();
+    vertices_.emplace_back(Vector2<decimal>{ origin_x - rectangle_base - offset, origin_y - offset });
+    vertices_.emplace_back(Vector2<decimal>{ origin_x + rectangle_base + offset, origin_y - offset });
+    vertices_.emplace_back(Vector2<decimal>{ origin_x, origin_y + 2 * rectangle_height + offset });
 
-    super_triangle_.setVertices(0, 1, 2);
+    super_triangle_.setVertices(id, id + 1, id + 2);
     triangles_.push_back(super_triangle_);
 }
 
@@ -75,7 +76,7 @@ void Delaunay::addVertex(uint32_t vertex_id)
 
     // retriangulate polygonal hole
     for (const auto& edge : edges_around_point) {
-        Triangle new_triangle(vertices_, vertices_.size(), edge.first, edge.second, vertex_id);
+        Triangle new_triangle(vertices_, triangles_.size(), edge.first, edge.second, vertex_id);
         triangles_.push_back(new_triangle);
     }
 }
@@ -102,6 +103,8 @@ void Delaunay::finish()
     }
 
     removeTriangles(bad_triangles);
+    // erase the vertices added for super triangle
+    vertices_.erase(vertices_.end() - 3, vertices_.end());
 }
 
 LineVector Delaunay::buildEdgesAroundPoint(const std::set<uint32_t>& bad_triangles)
