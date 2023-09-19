@@ -8,9 +8,9 @@
 class Delaunay
 {
 private:
-	const std::vector<Vector2<decimal>>& vertices_;
+	const VertexVector& vertices_;
 	std::vector<Triangle> triangles_{};
-	std::vector<Vector2<decimal>> super_triangle_vertices_ {};
+	VertexVector super_triangle_vertices_ {};
 	Triangle super_triangle_;
 
 	void addVertex(uint32_t vertex_id);
@@ -18,11 +18,11 @@ private:
 	std::tuple<decimal, decimal, decimal, decimal> findRectangleAroundPoints();
 	void removeTriangles(const std::set<uint32_t>& triangles_to_delete);
 	void finish();
-	std::vector<std::pair<uint32_t, uint32_t>> buildEdgesAroundPoint(const std::set<uint32_t>& bad_triangles);
+	LineVector buildEdgesAroundPoint(const std::set<uint32_t>& bad_triangles);
 	void findMinMaxXY();
 public:
 	Delaunay() = delete;
-	Delaunay(const std::vector<Vector2<decimal>>& vertices_);
+	Delaunay(const VertexVector& vertices_);
 	~Delaunay() = default;
 	std::vector<Triangle> processTriangulation();
 };

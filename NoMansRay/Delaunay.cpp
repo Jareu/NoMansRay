@@ -2,7 +2,7 @@
 #include "maths.h"
 #include <algorithm>
 
-Delaunay::Delaunay(const std::vector<Vector2<decimal>>& vertices_) :
+Delaunay::Delaunay(const VertexVector& vertices_) :
     vertices_ { vertices_ },
     super_triangle_ { super_triangle_vertices_, 0 }
 { }
@@ -104,9 +104,9 @@ void Delaunay::finish()
     removeTriangles(bad_triangles);
 }
 
-std::vector<std::pair<uint32_t, uint32_t>> Delaunay::buildEdgesAroundPoint(const std::set<uint32_t>& bad_triangles)
+LineVector Delaunay::buildEdgesAroundPoint(const std::set<uint32_t>& bad_triangles)
 {
-    std::vector<std::pair<uint32_t, uint32_t>> edges_around_point{};
+    LineVector edges_around_point{};
 
     for (const auto bad_triangle_index : bad_triangles) {
         // for each edge in triangle
