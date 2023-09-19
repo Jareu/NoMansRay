@@ -13,7 +13,7 @@
 #include "globals.h"
 #include "Vector2.h"
 #include "Vector3.h"
-
+#include "Triangle.h"
 
 enum RENDER_RESULT {
 	RENDER_SUCCESS = 0,
