@@ -13,6 +13,26 @@ int maths::random_range(int min, int max)
 	return min + (std::rand() % (max - min + 1));
 }
 
+std::pair<Vector2<decimal>, decimal> maths::get_circumcenter(const Triangle& triangle)
+{
+	auto a = triangle.getV1();
+	auto b = triangle.getV1();
+	auto c = triangle.getV1();
+
+	const decimal d = 2 * (a.x() * (b.y() - c.y()) + b.x() * (c.y() - a.y()) + c.x() * (a.y() - b.y()));
+
+	decimal a2 = a.x() * a.x() + a.y() * a.y();
+	decimal b2 = b.x() * b.x() + b.y() * b.y();
+	decimal c2 = c.x() * c.x() + c.y() * c.y();
+
+	decimal circumcenter_x = (a2 * (b.y() - c.y()) + b2 * (c.y() - a.y()) + c2 * (a.y() - b.y())) / d;
+	decimal circumcenter_y = (a2 * (c.x() - b.x()) + b2 * (a.x() - c.x()) + c2 * (b.x() - a.x())) / d;
+
+	decimal radius = sqrt((circumcenter_x - a.x()) * (circumcenter_x - a.x()) + (circumcenter_y - a.y()) * (circumcenter_y - a.y()));
+
+	return std::make_pair(Vector2<decimal>(circumcenter_x, circumcenter_y), radius);
+}
+
 decimal maths::get_distance_between_two_points(const Vector2<decimal>& point1, const Vector2<decimal>& point2)
 {
 	decimal dx = point2.x() - point1.x();
