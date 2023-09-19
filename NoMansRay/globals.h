@@ -4,9 +4,13 @@
 #pragma warning( disable : 4468 )
 #include "SDL.h"
 #pragma warning(pop)
-#include "types.h"
+#include "Vector2.h"
 
 #define TWOPI 6.2831853071f
+
+typedef float decimal; // so that floating point precision can be changed easily
+constexpr decimal ZERO_DECIMAL = static_cast<decimal>(0.0);
+constexpr decimal ONE_DECIMAL = static_cast<decimal>(1.0);
 
 inline bool is_active = false;
 inline bool is_running = false;
