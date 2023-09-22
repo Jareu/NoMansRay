@@ -133,6 +133,9 @@
       <AdditionalLibraryDirectories>$(SolutionDir)\libraries\box2d\build\bin\Debug;$(SolutionDir)\libraries\SDL_ttf\lib;$(SolutionDir)\libraries\SDL2_image-2.0.5\lib\x64;$(SolutionDir)\libraries\SDL2-2.0.16\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2_image.lib;SDL2.lib;SDL2main.lib;SDL2_ttf.lib;box2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>xcopy /y $(SolutionDir)libraries\SDL2_image-2.0.5\lib\x64\SDL2_image.dll $(OutDir)</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
