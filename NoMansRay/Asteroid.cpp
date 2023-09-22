@@ -48,34 +48,48 @@ void Asteroid::generate()
 
 void Asteroid::triangulate()
 {
-	Delaunay delaunay{ vertices_ };
+	Delaunay delaunay{ &vertices_ };
 	auto triangles = delaunay.processTriangulation();
+	addLinesFromTriangles(triangles);
 
-	// Build list of unique edges
-	// This builds up a concave hull
-	/*
-	LineVector new_lines{};
-	for (int triangle_index = 0; triangle_index < triangles.size(); triangle_index++) {
-		for (const auto& edge : triangles[triangle_index].getEdges()) {
-			bool shared_edge = false;
-			for (int other_triangle_index = 0; other_triangle_index < triangles.size(); other_triangle_index++) {
-				if (triangle_index = other_triangle_index) {
-					continue;
-				}
+	physics_body_def_.type = b2BodyType::b2_dynamicBody;
+	physics_body_def_.position.Set(position_.x(), position_.y());
+	physics_body_def_.angle = rotation_radians_;
+	physics_body_def_.gravityScale = 0.f;
 
-				if (triangles[other_triangle_index].hasEdge(edge)) {
-					shared_edge = true;
-					break;
-				}
-			}
+	density_ = 1.f;
+	friction_ = 0.1f;
+	restitution_ = 0.8f;
 
-			if (shared_edge == false) {
-				new_lines.push_back(edge);
-			}
+	physics_body_ = universe_.getPhysics()->CreateBody(&physics_body_def_);
+
+	// create physics bodies
+	for (const auto& triangle : triangles) {
+		b2PolygonShape shape{};
+		b2FixtureDef fixture_def{};
+
+		b2Hull poly_hull;
+		poly_hull.count = 3;
+
+		auto tri_verts = triangle.getVertices();
+		for (int v = 0; v < tri_verts.size(); v++) {
+			poly_hull.points[v] = { vertices_.at(tri_verts.at(v)).x(), vertices_.at(tri_verts.at(v)).y() };
 		}
-	}
-	*/
 
+		shape.Set(poly_hull);
+		fixture_def.shape = &shape;
+		fixture_def.density = density_;
+		fixture_def.friction = friction_;
+		fixture_def.restitution = restitution_;
+		physics_body_->CreateFixture(&fixture_def);
+	}
+
+	physics_body_->ApplyLinearImpulse({ physics_body_->GetMass() * linear_velocity_.x(), physics_body_->GetMass() * linear_velocity_.y() }, { position_.x(), position_.y() }, true);
+	physics_body_->ApplyAngularImpulse(physics_body_->GetMass() * angular_velocity_, true);
+}
+
+void Asteroid::addLinesFromTriangles(const std::vector<Triangle>& triangles)
+{
 	// Add edges to line list if the aren't there already
 	for (int triangle_index = 0; triangle_index < triangles.size(); triangle_index++) {
 		for (const auto& edge : triangles[triangle_index].getEdges()) {
