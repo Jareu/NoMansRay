@@ -24,6 +24,7 @@ public:
 	virtual void tick(decimal seconds_elapsed);
 	virtual void endPlay();
 	virtual void initialize(const SpawnParameters& spawn_parameters);
+	virtual void initialize();
 	
 	// Setters
 	virtual void setPosition(const Vector2<decimal>& new_position);

@@ -14,4 +14,6 @@ public:
 	Asteroid(Universe& universe);
 	~Asteroid() = default;
 	void initialize(const SpawnParameters& spawn_parameters) override;
+	void initialize() override;
+	void tick(decimal seconds_elapsed) override;
 };

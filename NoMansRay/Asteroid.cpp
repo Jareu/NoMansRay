@@ -1,6 +1,7 @@
 #include "Asteroid.h"
 #include "maths.h"
 #include "Delaunay.h"
+#include "Universe.h"
 
 #include <cstdlib>
 #include <cmath>
@@ -9,6 +10,11 @@
 Asteroid::Asteroid(Universe& universe) :
 	Actor(universe)
 {}
+
+void Asteroid::tick(decimal seconds_elapsed)
+{
+
+}
 
 // Generate 
 void Asteroid::generate()
@@ -92,6 +98,12 @@ void Asteroid::triangulate()
 }
 
 void Asteroid::initialize(const SpawnParameters& spawn_parameters)
+{
+	Object::initialize(spawn_parameters);
+	initialize();
+}
+
+void Asteroid::initialize()
 {
 	generate();
 }

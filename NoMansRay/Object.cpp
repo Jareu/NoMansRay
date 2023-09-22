@@ -31,7 +31,11 @@ void Object::initialize(const SpawnParameters& spawn_parameters)
 	linear_velocity_ = spawn_parameters.linear_velocity;
 	rotation_radians_ = spawn_parameters.rotation_radians;
 	angular_velocity_ = spawn_parameters.angular_velocity;
+	name_ = spawn_parameters.name;
 }
+
+void Object::initialize()
+{ }
 
 // Setters
 void Object::setPosition(const Vector2<decimal>& new_position)
