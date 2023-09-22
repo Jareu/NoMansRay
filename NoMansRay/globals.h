@@ -20,6 +20,7 @@ inline SDL_Window* window = nullptr;
 
 inline constexpr size_t BOX2D_MAX_VERTICES_IN_POLYGON = 8;
 inline constexpr float PIXELS_PER_METER = 50.f;
+inline constexpr float GRAVITY = 9.814f;
 
 inline int WINDOW_WIDTH = 1920;
 inline int WINDOW_HEIGHT = 1080;
