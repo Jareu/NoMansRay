@@ -1,5 +1,7 @@
 #pragma once
 #include <chrono>
+#include <vector>
+
 #pragma warning(push, 0)
 #pragma warning( disable : 4468 )
 #include "SDL.h"
@@ -17,6 +19,9 @@ inline bool is_running = false;
 inline bool is_fullscreen = true;
 inline SDL_Renderer* renderer = nullptr;
 inline SDL_Window* window = nullptr;
+
+typedef std::vector<std::pair<uint32_t, uint32_t>> LineVector;
+typedef std::vector<Vector2<decimal>> VertexVector;
 
 inline constexpr size_t BOX2D_MAX_VERTICES_IN_POLYGON = 8;
 inline constexpr float PIXELS_PER_METER = 50.f;

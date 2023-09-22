@@ -23,9 +23,6 @@ enum RENDER_RESULT {
 constexpr uint16_t SPRING_K = 2000;
 constexpr uint16_t SPRING_D = 20;
 
-typedef std::vector<std::pair<uint32_t, uint32_t>> LineVector;
-typedef std::vector<Vector2<decimal>> VertexVector;
-
 class VectorSpherical {
 public:
 	float theta = 0.f;
