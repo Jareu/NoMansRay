@@ -18,6 +18,7 @@
 #include <box2d.h>
 #include "Universe.h"
 #include "Asteroid.h"
+#include "maths.h"
 
 int		main();
 void	handleEvents();
@@ -71,61 +72,10 @@ int main()
 	SDL_ShowWindow(window);
 	SDL_RenderFillRect(renderer, NULL);
 
-	auto asteroid1 = universe->spawnActor<Asteroid>();
-	auto asteroid2 = universe->spawnActor<Asteroid>();
-	auto asteroid3 = universe->spawnActor<Asteroid>();
+	auto asteroid1 = universe->spawnActor<Asteroid>({ { 0.f, 0.f }, { 0.1f, 500.f }, 0.f, 50.f, "Asteroid_1" });
+	auto asteroid2 = universe->spawnActor<Asteroid>({ {-100.0, 300.0}, {0.1f, 500.f}, 0.f, 30.f , "Asteroid_2" });
+	auto asteroid3 = universe->spawnActor<Asteroid>({ {100.0, 300.0}, {0.5f, 500.f}, 0.f, 60.f , "Asteroid_3" });
 
-	asteroid1->setLinearVelocity(Vector2<decimal>(0.4f, 0.2f));
-	asteroid1->setAngularVelocity(-0.1f);
-	asteroid1->setName("Asteroid_1");
-
-	asteroid2->setLinearVelocity(Vector2<decimal>(0.1f, 0.2f));
-	asteroid2->setAngularVelocity(0.15f);
-	asteroid2->setPosition(Vector2<decimal>{-300.0, 300.0});
-	asteroid2->setName("Asteroid_2");
-
-	asteroid3->setLinearVelocity(Vector2<decimal>(0.5f, -0.4f));
-	asteroid3->setAngularVelocity(0.2f);
-	asteroid3->setPosition(Vector2<decimal>{300.0, 300.0});
-	asteroid3->setName("Asteroid_3");
-
-	// Ground box
-	float ground_box_height_half = 10.f;
-
-	SpawnParameters ground_params{
-		Vector2<decimal> {ZERO_DECIMAL, WINDOW_HEIGHT_HALF_F - ground_box_height_half - 1.f},
-		Vector2<decimal> {ZERO_DECIMAL, ZERO_DECIMAL},
-		ZERO_DECIMAL,
-		ZERO_DECIMAL,
-		"Ground"
-	};
-
-	auto ground_box = universe->spawnActor(ground_params);
-	ground_box->addVertex({ -WINDOW_WIDTH_HALF_F + 1.f, -ground_box_height_half });
-	ground_box->addVertex({ WINDOW_WIDTH_HALF_F - 1.f, -ground_box_height_half });
-	ground_box->addVertex({ WINDOW_WIDTH_HALF_F - 1.f, ground_box_height_half });
-	ground_box->addVertex({ -WINDOW_WIDTH_HALF_F + 1.f, ground_box_height_half });
-	ground_box->addLine(0, 1);
-	ground_box->addLine(1, 2);
-	ground_box->addLine(2, 3);
-	ground_box->addLine(3, 0);
-	ground_box->initializePhysics(b2BodyType::b2_staticBody, 0.f, 0.7f, 0.f);
-
-	// Dynamic Complex Object
-	float box_size_half = 30.f;
-	auto box = universe->spawnActor();
-	box->setName("Bouncy-Box");
-	box->addVertex({ -box_size_half, -box_size_half });
-	box->addVertex({ box_size_half, -box_size_half });
-	box->addVertex({ box_size_half, box_size_half });
-	box->addVertex({ -box_size_half, box_size_half });
-	box->addLine(0, 1);
-	box->addLine(1, 2);
-	box->addLine(2, 3);
-	box->addLine(3, 0);
-	box->setPosition(0.f, 0.f);
-	box->setRotation(M_PI_4 / 6);
-	box->initializePhysics(b2BodyType::b2_dynamicBody, 50.f, 0.4f, 0.7f);
 
 	while (is_running) {
 		handleEvents();
@@ -146,7 +96,7 @@ int main()
 	IMG_Quit();
 	SDL_Quit();
 
-	return 0;
+	return EXIT_SUCCESS;
 }
 
 // Do physics
