@@ -12,13 +12,10 @@ class triangle:
         self.p2 = (p2[0], p2[1])
         self.p3 = (p3[0], p3[1])
 
-
-R = 1
-p1 = ( R*random(), R*random())
-p2 = ( R*random(), R*random())
-p3 = ( R*random(), R*random())
-ST = triangle( p1, p2, p3)
-
+class edge:
+    def __init__(self, p1, p2):
+        self.p1 = (p1[0], p1[1])
+        self.p2 = (p2[0], p2[1])
 
 def circumcenter( triang, display = True):
     ax, ay = triang.p1[0], triang.p1[1]
@@ -51,20 +48,8 @@ def circumcenter( triang, display = True):
 
     return ( round( c_x, 5), round( c_y, 5)), round( radius, 5)
 
-class triangle:
-    def __init__(self, p1, p2, p3):
-        self.p1 = (p1[0], p1[1])
-        self.p2 = (p2[0], p2[1])
-        self.p3 = (p3[0], p3[1])
-
-class edge:
-    def __init__(self, p1, p2):
-        self.p1 = (p1[0], p1[1])
-        self.p2 = (p2[0], p2[1])
-
-
 class Delaunay():
-    def __init__(self, R = 10):
+    def __init__(self, ST, R = 10):
         self.mesh = {}
         self.points = []
         # if point aready exist, don't bother adding it!
@@ -72,24 +57,13 @@ class Delaunay():
         self.eps = 0.0001
 
         self.R = R
-        self.ST = triangle(  ( 0, R), ( R*sqrt(3)/2, -R/2 ), ( -R*sqrt(3)/2, -R/2 ))
-
-        # self.mesh[self.id] = triangle(  ( 0, R), ( R*sqrt(3)/2, -R/2 ), ( -R*sqrt(3)/2, -R/2 ))
-        # self.id += 1
-        # self.points.append( ( 0, R) )
-        # self.points.append( ( R*sqrt(3)/2, -R/2 ) )
-        # self.points.append( ( -R*sqrt(3)/2, -R/2 ) )
-
-        self.mesh[self.id] = triangle(  ( -R, R), ( R, R ), ( R, -R ))
+        self.super_triangle = ST
+        self.mesh[self.id] = ST
         self.id += 1
-        self.mesh[self.id] = triangle(  ( -R, R), ( -R, -R ), ( R, -R ))
-        self.id += 1
+        self.points.append( ST.p1 )
+        self.points.append( ST.p2 )
+        self.points.append( ST.p3 )
 
-        self.points.append( ( R, R) )
-        self.points.append( ( -R, R) )
-        self.points.append( ( R, -R) )
-        self.points.append( ( -R, -R) )
-    
     def pt_exists(self, _pt):
         flag = 0
         for pt in self.points:
@@ -212,29 +186,29 @@ class Delaunay():
     def add_point(self, pt):
         if not self.pt_exists( (pt[0], pt[1])):
             self.points.append( (pt[0], pt[1]) )
-            self.badT = {}
+            self.bad_triangles = {}
             list_keys = []
             for key in list(self.mesh.keys()):
                 T = self.mesh[key]
                 # In CircumCircle Garanties Fat Triangles:
                 if self.isInCircumcenter( T, pt ):
                     list_keys.append( key )
-                    self.badT[key] = triangle( (self.mesh[key].p1[0], self.mesh[key].p1[1]), (self.mesh[key].p2[0], self.mesh[key].p2[1]), (self.mesh[key].p3[0], self.mesh[key].p3[1]) )
+                    self.bad_triangles[key] = triangle( (self.mesh[key].p1[0], self.mesh[key].p1[1]), (self.mesh[key].p2[0], self.mesh[key].p2[1]), (self.mesh[key].p3[0], self.mesh[key].p3[1]) )
             
-            polygone = self.notSharedEdge( self.badT)
+            polygon = self.notSharedEdge( self.bad_triangles)
 
-            # for key in list(badT.keys()):
             for key in list_keys:
                 del self.mesh[key]
 
-            for E in polygone:
-                self.mesh[ self.id] = triangle( (E.p1[0], E.p1[1]), (pt[0], pt[1]), (E.p2[0], E.p2[1]) )
+            for edge in polygon:
+                self.mesh[ self.id] = triangle( (edge.p1[0], edge.p1[1]), (pt[0], pt[1]), (edge.p2[0], edge.p2[1]) )
                 self.id += 1
 
     def display( self ):
         plt.figure( figsize=(8,4) )
         plt.subplot( 1, 2, 1)
         X, Y = [], []
+        del self.points[0]
         for pt in self.points:
             X.append( pt[0] )
             Y.append( pt[1] )
@@ -249,8 +223,24 @@ class Delaunay():
         plt.scatter(  X, Y, c='r', s=25)
         plt.show()
 
-De = Delaunay( R=15 )
+def calculate_super_triangle(points):
+    min_x = min(points, key=lambda n: (n[0], -n[1]))[0]
+    max_x = max(points, key=lambda n: (n[0], -n[1]))[0]
+    min_y = min(points, key=lambda n: (n[1], -n[0]))[1]
+    max_y = max(points, key=lambda n: (n[1], -n[0]))[1]
 
+    rect_base = max_x - min_x
+    rect_height = max_y - min_y
+    origin_x = min_x + rect_base/2
+    origin_y = min_y
+    offset = 0.02
+
+    p1 = np.array([origin_x - rect_base - offset, origin_y - offset])
+    p2 = np.array([origin_x + rect_base + offset, origin_y - offset])
+    p3 = np.array([origin_x, origin_y + 2 * rect_height + offset])
+
+    super_triangle = triangle(p1, p2, p3)
+    return super_triangle
 
 pts = []
 N = 10
@@ -258,8 +248,8 @@ for _ in range( N ):
     x = 2*10*(random()-0.5)
     y = 2*10*(random()-0.5)
     pts.append( (x, y) )
-
+super_triangle = calculate_super_triangle(pts)
+De = Delaunay( ST=super_triangle, R=15 )
 for pt in pts:
     De.add_point( pt ) 
-
 De.display()
