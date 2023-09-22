@@ -1,14 +1,13 @@
 #pragma once
 
 #include "globals.h"
-#include "types.h"
 #include "Triangle.h"
 #include <set>
 
 class Delaunay
 {
 private:
-	VertexVector& vertices_;
+	VertexVector* vertices_;
 	std::vector<Triangle> triangles_{};
 	Triangle super_triangle_;
 
@@ -21,7 +20,7 @@ private:
 	void findMinMaxXY();
 public:
 	Delaunay() = delete;
-	Delaunay(VertexVector& vertices_);
+	Delaunay(VertexVector* vertices_);
 	~Delaunay() = default;
 	std::vector<Triangle> processTriangulation();
 };
