@@ -6,16 +6,16 @@
 class Triangle {
 private:
 	uint32_t id_;
-	const std::vector<Vector2<decimal>>& vertices_;
+	const VertexVector* vertices_;
 	std::array<uint32_t, 3> vertex_indices_ = { 0, 0, 0 };
 	std::array<std::pair<uint32_t, uint32_t>, 3> edges_;
 public:
 	Triangle() = delete;
-	Triangle(const std::vector<Vector2<decimal>>& vertices, uint32_t id);
-	Triangle(const std::vector<Vector2<decimal>>& vertices, uint32_t id, uint32_t v1, uint32_t v2, uint32_t v3);
+	Triangle(const VertexVector* vertices);
+	Triangle(const VertexVector* vertices, uint32_t id);
+	Triangle(const VertexVector* vertices, uint32_t id, uint32_t v1, uint32_t v2, uint32_t v3);
 	~Triangle() = default;
 	Triangle(const Triangle& other_triangle);
-	Triangle& operator=(const Triangle& rhs);
 
 	// Id
 	uint32_t getId() const;
