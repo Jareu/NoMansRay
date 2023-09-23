@@ -94,6 +94,7 @@ void Delaunay::finish()
 {
     std::set<uint32_t> bad_triangles{};
     std::vector<std::pair<Line, bool>> bad_triangle_edges{};
+    uint32_t super_triangle_vertices_start = vertices_->size() - 3;
 
     for (const auto& triangle : triangles_) {
         bool shares_vertex_with_super_triangle = false;
@@ -105,32 +106,38 @@ void Delaunay::finish()
             }
         }
 
-        if (shares_vertex_with_super_triangle ) {
-            bad_triangles.insert(triangle.getId());
+        if (!shares_vertex_with_super_triangle) {
+            continue;
+        }
 
-            for (const auto& edge : triangle.getEdges()) {
-                bool found_edge = false;
-                for (auto& bad_edge_pair : bad_triangle_edges) {
-                    const auto& bad_edge = bad_edge_pair.first;
-                    if (bad_edge_pair.second && 
-                        bad_edge.first == edge.first && bad_edge.second == edge.second || 
-                        bad_edge.first == edge.second && bad_edge.second == edge.first)
-                    {
-                        found_edge = true;
-                        bad_edge_pair.second = false;
-                        break;
-                    }
-                }
-                if (!found_edge) {
-                    bad_triangle_edges.emplace_back(std::make_pair(edge, true));
+        bad_triangles.insert(triangle.getId());
+        
+        for (const auto& edge : triangle.getEdges()) {
+            bool found_edge = false;
+            for (auto& bad_edge_pair : bad_triangle_edges) {
+                const auto& bad_edge = bad_edge_pair.first;
+                if (bad_edge_pair.second && 
+                    bad_edge.first == edge.first && bad_edge.second == edge.second || 
+                    bad_edge.first == edge.second && bad_edge.second == edge.first)
+                {
+                    found_edge = true;
+                    bad_edge_pair.second = false;
+                    break;
                 }
             }
-
-            for (const auto& bad_edge_pair : bad_triangle_edges) {
-                if (bad_edge_pair.second) {
-                    hull_.emplace_back(bad_edge_pair.first);
-                }
+            if (!found_edge && 
+                edge.first < super_triangle_vertices_start && 
+                edge.second < super_triangle_vertices_start)
+            {
+                bad_triangle_edges.emplace_back(std::make_pair(edge, true));
             }
+        }
+        
+    }
+
+    for (const auto& bad_edge_pair : bad_triangle_edges) {
+        if (bad_edge_pair.second) {
+            hull_.emplace_back(bad_edge_pair.first);
         }
     }
 
