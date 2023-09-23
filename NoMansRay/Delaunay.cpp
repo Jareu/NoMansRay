@@ -179,3 +179,31 @@ void Delaunay::removeTriangles(const std::set<uint32_t>& triangles_to_delete)
         triangles_.at(index).setId(index);
     }
 }
+
+void Delaunay::getConcaveHull()
+{
+    // Build list of unique edges
+    // This builds up a concave hull
+
+    LineVector new_lines{};
+    for (int triangle_index = 0; triangle_index < triangles.size(); triangle_index++) {
+        for (const auto& edge : triangles[triangle_index].getEdges()) {
+            bool shared_edge = false;
+            for (int other_triangle_index = 0; other_triangle_index < triangles.size(); other_triangle_index++) {
+                if (triangle_index = other_triangle_index) {
+                    continue;
+                }
+
+                if (triangles[other_triangle_index].hasEdge(edge)) {
+                    shared_edge = true;
+                    break;
+                }
+            }
+
+            if (shared_edge == false) {
+                new_lines.push_back(edge);
+            }
+        }
+    }
+
+}

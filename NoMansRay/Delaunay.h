@@ -23,4 +23,5 @@ public:
 	Delaunay(VertexVector* vertices_);
 	~Delaunay() = default;
 	std::vector<Triangle> processTriangulation();
+	void getConcaveHull();
 };
