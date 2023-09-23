@@ -7,7 +7,7 @@ Universe::Universe(const int seed) :
 	actor_map_{},
 	last_tick_time_{ std::chrono::system_clock::now() },
 	RANDOM_SEED{ seed },
-	physics_settings_{ 6, 2, {0.0f * PIXELS_PER_METER, 9.814f * PIXELS_PER_METER } },
+	physics_settings_{ 6, 2, {0.0f * PIXELS_PER_METER, GRAVITY * PIXELS_PER_METER } },
 	physics{ b2World(physics_settings_.gravity) }
 {
 	srand(RANDOM_SEED);

@@ -125,14 +125,23 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\libraries\SDL_ttf\include;$(SolutionDir)\libraries\box2d\include\box2d;$(SolutionDir)\libraries\SDL2_image-2.0.5\include;$(SolutionDir)\libraries\SDL2-2.0.16\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Jamie\source\repos\NoMansRay\libraries\box2d\build\bin\Debug;$(SolutionDir)\libraries\SDL_ttf\lib;$(SolutionDir)\libraries\SDL2_image-2.0.5\lib\x64;$(SolutionDir)\libraries\SDL2-2.0.16\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\libraries\box2d\build\bin\Debug;$(SolutionDir)\libraries\SDL_ttf\lib;$(SolutionDir)\libraries\SDL2_image-2.0.5\lib\x64;$(SolutionDir)\libraries\SDL2-2.0.16\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2_image.lib;SDL2.lib;SDL2main.lib;SDL2_ttf.lib;box2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>xcopy /y $(SolutionDir)libraries\SDL2_image-2.0.5\lib\x64\SDL2_image.dll $(OutDir)
+xcopy /y $(SolutionDir)libraries\SDL2-2.0.16\lib\x64\SDL2.dll $(OutDir)</Command>
+      <Message>Copy DLLs to output directory</Message>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -157,23 +166,27 @@
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
     <ClCompile Include="Asteroid.cpp" />
+    <ClCompile Include="Delaunay.cpp" />
     <ClCompile Include="graphics.cpp" />
     <ClCompile Include="maths.cpp" />
     <ClCompile Include="NoMansRay.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="SpaceShip.cpp" />
     <ClCompile Include="Thruster.cpp" />
+    <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Universe.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
     <ClInclude Include="Asteroid.h" />
+    <ClInclude Include="Delaunay.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="graphics.h" />
     <ClInclude Include="maths.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="SpaceShip.h" />
     <ClInclude Include="Thruster.h" />
+    <ClInclude Include="Triangle.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="Universe.h" />
     <ClInclude Include="Vector2.h" />

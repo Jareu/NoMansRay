@@ -78,12 +78,12 @@ void Actor::updatePhysics(decimal seconds_elapsed)
 // this is equivalent to a counter-clockwise vertex definition as per Box2D docs.
 void Actor::addVertex(const Vector2<decimal>& coordinates)
 {
-	vertices_.push_back(coordinates);
+	vertices_.emplace_back(coordinates);
 }
 
 void Actor::addLine(uint32_t vertex_0, uint32_t vertex_1)
 {
-	lines_.push_back(std::make_pair(vertex_0, vertex_1));
+	lines_.emplace_back(std::make_pair(vertex_0, vertex_1));
 }
 
 const LineVector& Actor::getLines() const

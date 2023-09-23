@@ -26,6 +26,15 @@ public:
 	~Universe() = default;
 
 	template <class T = Actor>
+	Actor* spawnActor(
+		const Vector2<decimal>& position,
+		const Vector2<decimal>& linear_velocity,
+		const decimal rotation_radians,
+		const decimal angular_velocity,
+		const std::string& name
+	);
+
+	template <class T = Actor>
 	Actor* spawnActor(const SpawnParameters& spawn_parameters);
 
 	template <class T = Actor>

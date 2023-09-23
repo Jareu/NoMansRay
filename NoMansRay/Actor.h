@@ -5,9 +5,6 @@
 #include "types.h"
 #include "Object.h"
 
-typedef std::vector<std::pair<uint32_t, uint32_t>> LineVector;
-typedef std::vector<Vector2<decimal>> VertexVector;
-
 class Actor : public Object
 {
 protected:

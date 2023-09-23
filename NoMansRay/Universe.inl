@@ -1,4 +1,15 @@
 template <class T>
+Actor* spawnActor(
+	const Vector2<decimal>& position,
+	const Vector2<decimal>& linear_velocity,
+	const decimal rotation_radians,
+	const decimal angular_velocity,
+	const std::string& name)
+{
+	return spawnActor<T>({ position, linear_velocity, rotation_radians, angular_velocity, name });
+}
+
+template <class T>
 Actor* Universe::spawnActor(const SpawnParameters& spawn_parameters)
 {
 	static_assert(std::is_convertible<T*, Actor*>::value, "Derived must inherit Base as public");
