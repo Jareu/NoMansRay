@@ -5,23 +5,26 @@
 
 Delaunay::Delaunay(VertexVector* vertices_) :
     vertices_ { vertices_ },
-    super_triangle_ { vertices_, 0 }
+    triangles_{},
+    super_triangle_ { vertices_, 0 },
+    hull_ {},
+    triangulation_valid_ {false}
 { }
 
-std::vector<Triangle> Delaunay::processTriangulation()
+std::vector<Triangle>& Delaunay::getTriangulation()
 {
     if (vertices_ == nullptr) {
         std::cout << "unable to process triangulation: vertex array is null" << std::endl;
-        return std::vector<Triangle> {};
+    } else if (!triangulation_valid_) {
+        triangles_.clear();
+        createSuperTriangle();
+
+        for (int i = 0; i < vertices_->size(); i++) {
+            addVertex(i);
+        }
+
+        finish();
     }
-
-    createSuperTriangle();
-
-    for (int i = 0; i < vertices_->size(); i++) {
-        addVertex(i);
-    }
-
-    finish();
 
     return triangles_;
 }
@@ -42,7 +45,7 @@ void Delaunay::createSuperTriangle()
     vertices_->emplace_back(Vector2<decimal>{ origin_x, origin_y + 2 * rectangle_height + offset });
 
     super_triangle_.setVertices(id, id + 1, id + 2);
-    triangles_.push_back(super_triangle_);
+    triangles_.emplace_back(super_triangle_);
 }
 
 std::tuple<decimal, decimal, decimal, decimal> Delaunay::findRectangleAroundPoints()
@@ -83,15 +86,14 @@ void Delaunay::addVertex(uint32_t vertex_id)
     // retriangulate polygonal hole
     for (const auto& edge : edges_around_point) {
         Triangle new_triangle(vertices_, triangles_.size(), edge.first, edge.second, vertex_id);
-        triangles_.push_back(new_triangle);
+        triangles_.emplace_back(new_triangle);
     }
 }
 
 void Delaunay::finish()
 {
     std::set<uint32_t> bad_triangles{};
-
-    // TODO: add edges connected to super triangle to convex hull list
+    std::vector<std::pair<Line, bool>> bad_triangle_edges{};
 
     for (const auto& triangle : triangles_) {
         bool shares_vertex_with_super_triangle = false;
@@ -103,15 +105,32 @@ void Delaunay::finish()
             }
         }
 
-        std::cout << "checking for concave triangles." << std::endl;
-        bool is_concave = false;
-        float cross_product = maths::cross_product(triangle.getV2() - triangle.getV1(), triangle.getV3() - triangle.getV2());
-        if (cross_product < 0) {
-            std::cout << "got concave triangle!" << std::endl;
-        }
-
-        if (shares_vertex_with_super_triangle || is_concave) {
+        if (shares_vertex_with_super_triangle ) {
             bad_triangles.insert(triangle.getId());
+
+            for (const auto& edge : triangle.getEdges()) {
+                bool found_edge = false;
+                for (auto& bad_edge_pair : bad_triangle_edges) {
+                    const auto& bad_edge = bad_edge_pair.first;
+                    if (bad_edge_pair.second && 
+                        bad_edge.first == edge.first && bad_edge.second == edge.second || 
+                        bad_edge.first == edge.second && bad_edge.second == edge.first)
+                    {
+                        found_edge = true;
+                        bad_edge_pair.second = false;
+                        break;
+                    }
+                }
+                if (!found_edge) {
+                    bad_triangle_edges.emplace_back(std::make_pair(edge, true));
+                }
+            }
+
+            for (const auto& bad_edge_pair : bad_triangle_edges) {
+                if (bad_edge_pair.second) {
+                    hull_.emplace_back(bad_edge_pair.first);
+                }
+            }
         }
     }
 
@@ -119,6 +138,8 @@ void Delaunay::finish()
 
     // erase the vertices added for super triangle
     vertices_->erase(vertices_->end() - 3, vertices_->end());
+
+    triangulation_valid_ = true;
 }
 
 LineVector Delaunay::buildEdgesAroundPoint(const std::set<uint32_t>& bad_triangles)
@@ -142,7 +163,7 @@ LineVector Delaunay::buildEdgesAroundPoint(const std::set<uint32_t>& bad_triangl
             }
 
             if (!edge_shared) {
-                edges_around_point.push_back(edge);
+                edges_around_point.emplace_back(edge);
             }
         }
     }
@@ -180,30 +201,7 @@ void Delaunay::removeTriangles(const std::set<uint32_t>& triangles_to_delete)
     }
 }
 
-void Delaunay::getConcaveHull()
+LineVector& Delaunay::getConcaveHull()
 {
-    // Build list of unique edges
-    // This builds up a concave hull
-
-    LineVector new_lines{};
-    for (int triangle_index = 0; triangle_index < triangles.size(); triangle_index++) {
-        for (const auto& edge : triangles[triangle_index].getEdges()) {
-            bool shared_edge = false;
-            for (int other_triangle_index = 0; other_triangle_index < triangles.size(); other_triangle_index++) {
-                if (triangle_index = other_triangle_index) {
-                    continue;
-                }
-
-                if (triangles[other_triangle_index].hasEdge(edge)) {
-                    shared_edge = true;
-                    break;
-                }
-            }
-
-            if (shared_edge == false) {
-                new_lines.push_back(edge);
-            }
-        }
-    }
-
+    return hull_;
 }

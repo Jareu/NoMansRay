@@ -8,8 +8,11 @@
 #include <vector>
 
 Asteroid::Asteroid(Universe& universe) :
-	Actor(universe)
-{}
+	Actor(universe),
+	delaunay_{ std::make_unique<Delaunay>(&vertices_) }
+{
+
+}
 
 void Asteroid::tick(decimal seconds_elapsed)
 {
@@ -24,23 +27,20 @@ void Asteroid::generate()
 	std::vector<int> radii{};
 
 	for (uint16_t i = 0; i < NUM_VERTICES; i++) {
-		radii.push_back(maths::random_range(MIN_RADIUS, MAX_RADIUS));
+		radii.emplace_back(maths::random_range(MIN_RADIUS, MAX_RADIUS));
 		auto slice = maths::random_range(0, 100);
 		slice_total += slice;
-		angle_slices.push_back(slice);
+		angle_slices.emplace_back(slice);
 	}
 
 	double angle = 0.0;
 
 	for (uint16_t i = 0; i < NUM_VERTICES; i++) {
 		angle += (2 * M_PI * angle_slices[i]) / slice_total;
-		vertices_.push_back(Vector2<decimal>{
+		vertices_.emplace_back(Vector2<decimal>{
 			static_cast<decimal>(radii[i] * std::cos(angle)),
 			static_cast<decimal>(radii[i] * std::sin(angle))
 		});
-		lines_.push_back(std::make_pair(
-			(i == 0 ? NUM_VERTICES - 1 : i - 1), i
-		));
 	}
 
 	triangulate();
@@ -48,9 +48,14 @@ void Asteroid::generate()
 
 void Asteroid::triangulate()
 {
-	Delaunay delaunay{ &vertices_ };
-	auto triangles = delaunay.processTriangulation();
-	addLinesFromTriangles(triangles);
+	auto triangles = delaunay_->getTriangulation();
+	auto hull = delaunay_->getConcaveHull();
+	
+	for (const auto& line : hull) {
+		lines_.emplace_back(line);
+	}
+
+	//addLinesFromTriangles(triangles);
 
 	physics_body_def_.type = b2BodyType::b2_dynamicBody;
 	physics_body_def_.position.Set(position_.x(), position_.y());
@@ -105,7 +110,7 @@ void Asteroid::addLinesFromTriangles(const std::vector<Triangle>& triangles)
 			}
 
 			if (line_exists == false) {
-				lines_.push_back(edge);
+				lines_.emplace_back(edge);
 			}
 		}
 	}
