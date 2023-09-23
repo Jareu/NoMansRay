@@ -94,7 +94,6 @@ void Delaunay::finish()
 {
     std::set<uint32_t> bad_triangles{};
     std::vector<std::pair<Line, bool>> bad_triangle_edges{};
-    uint32_t super_triangle_vertices_start = vertices_->size() - 3;
 
     for (const auto& triangle : triangles_) {
         bool shares_vertex_with_super_triangle = false;
@@ -106,33 +105,10 @@ void Delaunay::finish()
             }
         }
 
-        if (!shares_vertex_with_super_triangle) {
-            continue;
+        if (shares_vertex_with_super_triangle) {
+            bad_triangles.insert(triangle.getId());
+            FindHullEdges(triangle, bad_triangle_edges);
         }
-
-        bad_triangles.insert(triangle.getId());
-        
-        for (const auto& edge : triangle.getEdges()) {
-            bool found_edge = false;
-            for (auto& bad_edge_pair : bad_triangle_edges) {
-                const auto& bad_edge = bad_edge_pair.first;
-                if (bad_edge_pair.second && 
-                    bad_edge.first == edge.first && bad_edge.second == edge.second || 
-                    bad_edge.first == edge.second && bad_edge.second == edge.first)
-                {
-                    found_edge = true;
-                    bad_edge_pair.second = false;
-                    break;
-                }
-            }
-            if (!found_edge && 
-                edge.first < super_triangle_vertices_start && 
-                edge.second < super_triangle_vertices_start)
-            {
-                bad_triangle_edges.emplace_back(std::make_pair(edge, true));
-            }
-        }
-        
     }
 
     for (const auto& bad_edge_pair : bad_triangle_edges) {
@@ -147,6 +123,32 @@ void Delaunay::finish()
     vertices_->erase(vertices_->end() - 3, vertices_->end());
 
     triangulation_valid_ = true;
+}
+
+void Delaunay::FindHullEdges(const Triangle& triangle, std::vector<std::pair<Line, bool>>& bad_triangle_edges)
+{
+    uint32_t super_triangle_vertices_start = vertices_->size() - 3;
+
+    for (const auto& edge : triangle.getEdges()) {
+        bool found_edge = false;
+        for (auto& bad_edge_pair : bad_triangle_edges) {
+            const auto& bad_edge = bad_edge_pair.first;
+            if (bad_edge_pair.second &&
+                bad_edge.first == edge.first && bad_edge.second == edge.second ||
+                bad_edge.first == edge.second && bad_edge.second == edge.first)
+            {
+                found_edge = true;
+                bad_edge_pair.second = false;
+                break;
+            }
+        }
+        if (!found_edge &&
+            edge.first < super_triangle_vertices_start &&
+            edge.second < super_triangle_vertices_start)
+        {
+            bad_triangle_edges.emplace_back(std::make_pair(edge, true));
+        }
+    }
 }
 
 LineVector Delaunay::buildEdgesAroundPoint(const std::set<uint32_t>& bad_triangles)

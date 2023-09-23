@@ -19,6 +19,7 @@ private:
 	void removeTriangles(const std::set<uint32_t>& triangles_to_delete);
 	void finish();
 	LineVector buildEdgesAroundPoint(const std::set<uint32_t>& bad_triangles);
+	void FindHullEdges(const Triangle& triangle, std::vector<std::pair<Line, bool>>& bad_triangle_edges);
 public:
 	Delaunay() = delete;
 	Delaunay(VertexVector* vertices_);
