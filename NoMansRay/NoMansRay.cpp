@@ -42,14 +42,14 @@ int main()
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
 		// SDL failed. Output error message and exit
-		std::cout << "Failed to initialize SDL:" << SDL_GetError() << "\n";
+		std::cout << "Failed to initialize SDL:" << SDL_GetError() << std::endl;
 		return EXIT_FAILURE;
 	}
 
 	// Create Window
 	window = SDL_CreateWindow("Test Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 0, 0, SDL_WINDOW_FLAGS);
 	if (!window) {
-		std::cout << "Failed to create window: " << SDL_GetError() << "\n";
+		std::cout << "Failed to create window: " << SDL_GetError() << std::endl;
 		return EXIT_FAILURE;
 	}
 
@@ -60,7 +60,7 @@ int main()
 	// Create Renderer
 	renderer = SDL_CreateRenderer(window, SDL_WINDOW_INDEX, SDL_RENDERER_FLAGS);
 	if (!renderer) {
-		std::cout << "Failed to create renderer: " << SDL_GetError() << "\n";
+		std::cout << "Failed to create renderer: " << SDL_GetError() << std::endl;
 		return EXIT_FAILURE;
 	}
 
@@ -76,6 +76,21 @@ int main()
 	auto asteroid2 = universe->spawnActor<Asteroid>({ {-100.0, 300.0}, {0.1f, 500.f}, 0.f, 30.f , "Asteroid_2" });
 	auto asteroid3 = universe->spawnActor<Asteroid>({ {100.0, 300.0}, {0.5f, 500.f}, 0.f, 60.f , "Asteroid_3" });
 
+	// handle audio
+	SDL_AudioSpec wavSpec;
+	uint8* wavBuffer;
+	uint32_t wavLength;
+
+	auto load_music = SDL_LoadWAV("ambient_music.wav", &wavSpec, &wavBuffer, &wavLength);
+
+	if (!load_music) {
+		std::cout << "Unable to load WAV: " << SDL_GetError() << std::endl;
+		return EXIT_FAILURE;
+	}
+
+	SDL_AudioDeviceID deviceId = SDL_OpenAudioDevice(NULL, 0, &wavSpec, NULL, 0);
+	int success = SDL_QueueAudio(deviceId, wavBuffer, wavLength);
+	SDL_PauseAudioDevice(deviceId, 0);
 
 	while (is_running) {
 		handleEvents();
@@ -93,6 +108,8 @@ int main()
 	renderer = nullptr;
 	window = nullptr;
 
+	SDL_CloseAudioDevice(deviceId);
+	SDL_FreeWAV(wavBuffer);
 	IMG_Quit();
 	SDL_Quit();
 
