@@ -81,7 +81,7 @@ int main()
 	uint8* wavBuffer;
 	uint32_t wavLength;
 
-	auto load_music = SDL_LoadWAV("ambient_music.wav", &wavSpec, &wavBuffer, &wavLength);
+	auto load_music = SDL_LoadWAV("audio/music/ambient_music.wav", &wavSpec, &wavBuffer, &wavLength);
 
 	if (!load_music) {
 		std::cout << "Unable to load WAV: " << SDL_GetError() << std::endl;

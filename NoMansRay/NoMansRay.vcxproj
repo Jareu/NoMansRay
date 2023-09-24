@@ -97,6 +97,11 @@
       <AdditionalLibraryDirectories>C:\Users\Jamie\source\repos\NoMansRay\libraries\box2d\build\bin\Debug;$(SolutionDir)\libraries\SDL_ttf\lib;$(SolutionDir)\libraries\SDL2_image-2.0.5\lib\x64;$(SolutionDir)\libraries\SDL2-2.0.16\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2_image.lib;SDL2.lib;SDL2main.lib;SDL2_ttf.lib;box2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /y $(SolutionDir)libraries\SDL2_image-2.0.5\lib\x64\SDL2_image.dll $(OutDir)
+xcopy /y $(SolutionDir)libraries\SDL2-2.0.16\lib\x64\SDL2.dll $(OutDir)
+Xcopy /y $(SolutionDir)audio $(OutDir)audio /E /C /I</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -119,7 +124,8 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy /y $(SolutionDir)libraries\SDL2_image-2.0.5\lib\x64\SDL2_image.dll $(OutDir)
-xcopy /y $(SolutionDir)libraries\SDL2-2.0.16\lib\x64\SDL2.dll $(OutDir)</Command>
+xcopy /y $(SolutionDir)libraries\SDL2-2.0.16\lib\x64\SDL2.dll $(OutDir)
+Xcopy /y $(SolutionDir)audio $(OutDir)audio /E /C /I</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -143,7 +149,8 @@ xcopy /y $(SolutionDir)libraries\SDL2-2.0.16\lib\x64\SDL2.dll $(OutDir)</Command
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>xcopy /y $(SolutionDir)libraries\SDL2_image-2.0.5\lib\x64\SDL2_image.dll $(OutDir)
-xcopy /y $(SolutionDir)libraries\SDL2-2.0.16\lib\x64\SDL2.dll $(OutDir)</Command>
+xcopy /y $(SolutionDir)libraries\SDL2-2.0.16\lib\x64\SDL2.dll $(OutDir)
+Xcopy /y $(SolutionDir)audio $(OutDir)audio /E /C /I</Command>
       <Message>Copy DLLs to output directory</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -169,7 +176,7 @@ xcopy /y $(SolutionDir)libraries\SDL2-2.0.16\lib\x64\SDL2.dll $(OutDir)</Command
     <PostBuildEvent>
       <Command>xcopy /y $(SolutionDir)libraries\SDL2_image-2.0.5\lib\x64\SDL2_image.dll $(OutDir)
 xcopy /y $(SolutionDir)libraries\SDL2-2.0.16\lib\x64\SDL2.dll $(OutDir)
-xcopy /y $(SolutionDir)audio\ $(OutDir)\audio</Command>
+Xcopy /y $(SolutionDir)audio $(OutDir)audio /E /C /I</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
