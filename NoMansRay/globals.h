@@ -19,6 +19,7 @@ inline bool is_running = false;
 inline bool is_fullscreen = true;
 inline SDL_Renderer* renderer = nullptr;
 inline SDL_Window* window = nullptr;
+inline int global_volume = 0;
 
 typedef std::pair<uint32_t, uint32_t> Line;
 typedef std::vector<Line> LineVector;
