@@ -3,10 +3,10 @@
 #ifndef _USE_MATH_DEFINES
 #define _USE_MATH_DEFINES
 #endif
+#include <math.h>
 
 #include <typeinfo>
 #include <stdint.h>
-#include <math.h>
 #include <string>
 #include <cstdint>
 #include <box2d.h>
