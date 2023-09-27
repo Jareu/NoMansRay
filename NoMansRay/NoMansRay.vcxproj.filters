@@ -16,6 +16,9 @@
     <Filter Include="Classes">
       <UniqueIdentifier>{b806d733-4d96-4a51-a50a-86104c6ae4f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Audio">
+      <UniqueIdentifier>{354301ba-0a87-48b3-95b5-803b4a4650a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NoMansRay.cpp">
