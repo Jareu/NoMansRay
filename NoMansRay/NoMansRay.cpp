@@ -5,6 +5,7 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include "SDL_ttf.h"
+#include "SDL_mixer.h"
 #pragma warning(pop)
 #undef main
 
@@ -17,8 +18,11 @@
 
 #include <box2d.h>
 #include "Universe.h"
+#include <memory>
 #include "Asteroid.h"
 #include "maths.h"
+#include "IAudioManager.h"
+#include "AudioManagerFactory.h"
 
 int		main();
 void	handleEvents();
@@ -26,6 +30,7 @@ void	update();
 int		render();
 
 auto universe = std::make_unique<Universe>(1234);
+std::unique_ptr<IAudioManager> audio_manager;
 
 int main()
 {
@@ -40,16 +45,16 @@ int main()
 	}
 
 	// Initialize SDL
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0) {
 		// SDL failed. Output error message and exit
-		std::cout << "Failed to initialize SDL:" << SDL_GetError() << "\n";
+		std::cout << "Failed to initialize SDL:" << SDL_GetError() << std::endl;
 		return EXIT_FAILURE;
 	}
 
 	// Create Window
 	window = SDL_CreateWindow("Test Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 0, 0, SDL_WINDOW_FLAGS);
 	if (!window) {
-		std::cout << "Failed to create window: " << SDL_GetError() << "\n";
+		std::cout << "Failed to create window: " << SDL_GetError() << std::endl;
 		return EXIT_FAILURE;
 	}
 
@@ -60,9 +65,18 @@ int main()
 	// Create Renderer
 	renderer = SDL_CreateRenderer(window, SDL_WINDOW_INDEX, SDL_RENDERER_FLAGS);
 	if (!renderer) {
-		std::cout << "Failed to create renderer: " << SDL_GetError() << "\n";
+		std::cout << "Failed to create renderer: " << SDL_GetError() << std::endl;
 		return EXIT_FAILURE;
 	}
+
+	audio_manager = AudioManagerFactory::createAudioManager();
+
+	audio_manager->initMixer();
+
+	int music = audio_manager->loadMusic("audio/music/ambient_music.wav");
+	int sound = audio_manager->loadSound("audio/sfx/cold_space.wav");
+
+	audio_manager->playMusic(music);
 
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
@@ -76,6 +90,8 @@ int main()
 	auto asteroid2 = universe->spawnActor<Asteroid>({ {-100.0, 300.0}, {0.1f, 500.f}, 0.f, 30.f , "Asteroid_2" });
 	auto asteroid3 = universe->spawnActor<Asteroid>({ {100.0, 300.0}, {0.5f, 500.f}, 0.f, 60.f , "Asteroid_3" });
 
+	audio_manager->playMusic(0);
+	audio_manager->playSound(0);
 
 	while (is_running) {
 		handleEvents();
@@ -93,6 +109,7 @@ int main()
 	renderer = nullptr;
 	window = nullptr;
 
+	audio_manager.reset();
 	IMG_Quit();
 	SDL_Quit();
 

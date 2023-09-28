@@ -31,7 +31,7 @@ std::vector<Triangle>& Delaunay::getTriangulation()
 
 void Delaunay::createSuperTriangle()
 {
-    constexpr float offset = 0.02;    
+    constexpr float offset = 0.02f;    
 
     auto rectangle = findRectangleAroundPoints();
     decimal origin_x = std::get<2>(rectangle);
@@ -39,7 +39,7 @@ void Delaunay::createSuperTriangle()
     decimal rectangle_base = std::get<0>(rectangle);
     decimal rectangle_height = std::get<1>(rectangle);
 
-    uint32_t id = vertices_->size();
+    uint32_t id = static_cast<uint32_t>(vertices_->size());
     vertices_->emplace_back(Vector2<decimal>{ origin_x - rectangle_base - offset, origin_y - offset });
     vertices_->emplace_back(Vector2<decimal>{ origin_x + rectangle_base + offset, origin_y - offset });
     vertices_->emplace_back(Vector2<decimal>{ origin_x, origin_y + 2 * rectangle_height + offset });
@@ -85,7 +85,7 @@ void Delaunay::addVertex(uint32_t vertex_id)
 
     // retriangulate polygonal hole
     for (const auto& edge : edges_around_point) {
-        Triangle new_triangle(vertices_, triangles_.size(), edge.first, edge.second, vertex_id);
+        Triangle new_triangle(vertices_, static_cast<uint32_t>(triangles_.size()), edge.first, edge.second, vertex_id);
         triangles_.emplace_back(new_triangle);
     }
 }
@@ -127,7 +127,7 @@ void Delaunay::finish()
 
 void Delaunay::FindHullEdges(const Triangle& triangle, std::vector<std::pair<Line, bool>>& bad_triangle_edges)
 {
-    uint32_t super_triangle_vertices_start = vertices_->size() - 3;
+    uint32_t super_triangle_vertices_start = static_cast<uint32_t>(vertices_->size()) - 3;
 
     for (const auto& edge : triangle.getEdges()) {
         bool found_edge = false;
