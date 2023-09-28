@@ -18,119 +18,19 @@
 
 #include <box2d.h>
 #include "Universe.h"
+#include <memory>
 #include "Asteroid.h"
 #include "maths.h"
+#include "IAudioManager.h"
+#include "AudioManagerFactory.h"
 
 int		main();
 void	handleEvents();
 void	update();
 int		render();
 
-int loadMusic(const std::string& filename);
-int loadSound(const std::string& filename);
-void setVolume(uint32_t volume);
-
-int playMusic(uint32_t music_index);
-int playSound(uint32_t sound_index);
-
-int initMixer();
-void quitMixer();
-
-void togglePlay();
-
 auto universe = std::make_unique<Universe>(1234);
-std::vector<Mix_Chunk*> sounds{};
-std::vector<Mix_Music*> music{};
-
-int loadMusic(const std::string& filename)
-{
-	Mix_Music* music_file = nullptr;
-	music_file = Mix_LoadMUS(filename.c_str());
-	if (music_file == nullptr) {
-		std::cout << "Failed to load music. SDL_Mixer error: " << SDL_GetError() << std::endl;
-		return -1;
-	}
-	music.emplace_back(music_file);
-	return music.size() - 1;
-}
-
-int loadSound(const std::string& filename)
-{
-	Mix_Chunk* sound_file = nullptr;
-	sound_file = Mix_LoadWAV(filename.c_str());
-	if (sound_file == nullptr) {
-		std::cout << "Failed to load sound. SDL_Mixer error: " << SDL_GetError() << std::endl;
-		return -1;
-	}
-	sounds.emplace_back(sound_file);
-	return sounds.size() - 1;
-}
-
-void setVolume(uint32_t volume)
-{
-	global_volume = (MIX_MAX_VOLUME * volume) / 100;
-}
-
-int playMusic(uint32_t music_index)
-{
-	if (music_index >= music.size() || Mix_PlayingMusic() != 0) {
-		return 1;
-	}
-
-	Mix_Volume(1, global_volume);
-	Mix_PlayMusic(music.at(music_index), -1);
-
-	return 0;
-}
-
-int playSound(uint32_t sound_index)
-{
-	if (sound_index >= sounds.size()) {
-		return 1;
-	}
-
-	Mix_Volume(-1, global_volume);
-	Mix_PlayChannel(-1, sounds.at(sound_index), 0);
-
-	return 0;
-}
-
-int initMixer()
-{
-	Mix_Init(MIX_INIT_MP3);
-	SDL_Init(SDL_INIT_AUDIO);
-
-	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
-		std::cout << "SDL_Mixer could not initialize. Error: " << Mix_GetError() << std::endl;
-		return -1;
-	}
-	setVolume(80);
-	return 0;
-}
-
-void quitMixer()
-{
-
-	for (int s = 0; s < sounds.size(); s++) {
-		Mix_FreeChunk(sounds.at(s));
-		sounds.at(s) = nullptr;
-	}
-	for (int m = 0; m < music.size(); m++) {
-		Mix_FreeMusic(music.at(m));
-		music.at(m) = nullptr;
-	}
-	Mix_Quit();
-}
-
-void togglePlay()
-{
-	if (Mix_PausedMusic() == 1) {
-		Mix_ResumeMusic();
-	}
-	else {
-		Mix_PauseMusic();
-	}
-}
+std::unique_ptr<IAudioManager> audio_manager;
 
 int main()
 {
@@ -169,12 +69,14 @@ int main()
 		return EXIT_FAILURE;
 	}
 
-	initMixer();
+	audio_manager = AudioManagerFactory::createAudioManager();
 
-	int music = loadMusic("audio/music/ambient_music.wav");
-	int sound = loadSound("audio/sfx/cold_space.wav");
+	audio_manager->initMixer();
 
-	playMusic(music);
+	int music = audio_manager->loadMusic("audio/music/ambient_music.wav");
+	int sound = audio_manager->loadSound("audio/sfx/cold_space.wav");
+
+	audio_manager->playMusic(music);
 
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
@@ -188,8 +90,8 @@ int main()
 	auto asteroid2 = universe->spawnActor<Asteroid>({ {-100.0, 300.0}, {0.1f, 500.f}, 0.f, 30.f , "Asteroid_2" });
 	auto asteroid3 = universe->spawnActor<Asteroid>({ {100.0, 300.0}, {0.5f, 500.f}, 0.f, 60.f , "Asteroid_3" });
 
-	playMusic(0);
-	playSound(0);
+	audio_manager->playMusic(0);
+	audio_manager->playSound(0);
 
 	while (is_running) {
 		handleEvents();
@@ -207,7 +109,7 @@ int main()
 	renderer = nullptr;
 	window = nullptr;
 
-	quitMixer();
+	audio_manager.reset();
 	IMG_Quit();
 	SDL_Quit();
 

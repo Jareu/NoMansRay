@@ -186,7 +186,9 @@ Xcopy /y $(SolutionDir)audio $(OutDir)audio /E /C /I</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
+    <ClCompile Include="SdlMixerAudioManager.cpp" />
     <ClCompile Include="Asteroid.cpp" />
+    <ClCompile Include="AudioManagerFactory.cpp" />
     <ClCompile Include="Delaunay.cpp" />
     <ClCompile Include="graphics.cpp" />
     <ClCompile Include="maths.cpp" />
@@ -200,11 +202,14 @@ Xcopy /y $(SolutionDir)audio $(OutDir)audio /E /C /I</Command>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
     <ClInclude Include="Asteroid.h" />
+    <ClInclude Include="AudioManagerFactory.h" />
     <ClInclude Include="Delaunay.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="graphics.h" />
+    <ClInclude Include="IAudioManager.h" />
     <ClInclude Include="maths.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="SdlMixerAudioManager.h" />
     <ClInclude Include="SpaceShip.h" />
     <ClInclude Include="Thruster.h" />
     <ClInclude Include="Triangle.h" />
