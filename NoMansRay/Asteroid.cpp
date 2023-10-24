@@ -14,7 +14,17 @@ Asteroid::Asteroid(Universe& universe) :
 
 }
 
+void Asteroid::beginPlay()
+{
+
+}
+
 void Asteroid::tick(decimal seconds_elapsed)
+{
+
+}
+
+void Asteroid::endPlay()
 {
 
 }
@@ -88,9 +98,18 @@ void Asteroid::triangulate()
 		fixture_def.restitution = restitution_;
 		physics_body_->CreateFixture(&fixture_def);
 	}
+}
 
-	physics_body_->ApplyLinearImpulse({ physics_body_->GetMass() * linear_velocity_.x(), physics_body_->GetMass() * linear_velocity_.y() }, { position_.x(), position_.y() }, true);
-	physics_body_->ApplyAngularImpulse(physics_body_->GetMass() * angular_velocity_, true);
+
+void Asteroid::updatePhysics(decimal seconds_elapsed)
+{
+	Actor::updatePhysics(seconds_elapsed);
+
+	if (!physics_is_setup_) {
+		physics_body_->ApplyLinearImpulseToCenter({ physics_body_->GetMass() * linear_velocity_.x(), physics_body_->GetMass() * linear_velocity_.y() }, true);
+		physics_body_->ApplyAngularImpulse(physics_body_->GetMass() * angular_velocity_, true);
+		physics_is_setup_ = true;
+	}
 }
 
 void Asteroid::addLinesFromTriangles(const std::vector<Triangle>& triangles)
@@ -118,7 +137,7 @@ void Asteroid::addLinesFromTriangles(const std::vector<Triangle>& triangles)
 
 void Asteroid::initialize(const SpawnParameters& spawn_parameters)
 {
-	Object::initialize(spawn_parameters);
+	Actor::initialize(spawn_parameters);
 	initialize();
 }
 

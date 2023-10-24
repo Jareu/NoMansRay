@@ -37,17 +37,34 @@ void Universe::tick()
 		it++;
 	}
 
-	physics.ClearForces();
+	//physics.ClearForces();
 
 	last_tick_time_ = now;
 }
 
-void Universe::endExistance()
+void Universe::beginPlay()
+{
+	physics.Step(1 / 60.f, physics_settings_.velocity_iterations, physics_settings_.position_iterations);
+
+	ActorIdMap::iterator it = actor_map_.begin();
+
+	while (it != actor_map_.end()) {
+		auto actor = it->second;
+
+		if (actor) {
+			actor->beginPlay();
+		}
+
+		it++;
+	}
+}
+
+void Universe::endPlay()
 {
 	ActorIdMap::iterator it = actor_map_.begin();
 
 	while (it != actor_map_.end()) {
-		auto& actor = it->second;
+		auto actor = it->second;
 
 		if (actor) {
 			actor->endPlay();

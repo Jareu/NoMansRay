@@ -85,9 +85,12 @@ int main()
 	SDL_ShowWindow(window);
 	SDL_RenderFillRect(renderer, NULL);
 
-	auto asteroid1 = universe->spawnActor<Asteroid>({ { 0.f, 0.f }, { 0.1f, 500.f }, 0.f, 50.f, "Asteroid_1" });
-	auto asteroid2 = universe->spawnActor<Asteroid>({ {-100.0, 300.0}, {0.1f, 500.f}, 0.f, 30.f , "Asteroid_2" });
-	auto asteroid3 = universe->spawnActor<Asteroid>({ {100.0, 300.0}, {0.5f, 500.f}, 0.f, 60.f , "Asteroid_3" });
+	auto asteroid1 = universe->spawnActor<Asteroid>({ { 0.f, 0.f }, { 100.f, 100.f }, 0.f, 50.f, "Asteroid_1" });
+	auto asteroid2 = universe->spawnActor<Asteroid>({ {-100.0, 300.0}, {-50.f, -100.f}, 0.f, 30.f , "Asteroid_2" });
+	auto asteroid3 = universe->spawnActor<Asteroid>({ {100.0, 300.0}, {0.5f, -30.f}, 0.f, 60.f , "Asteroid_3" });
+	auto asteroid4 = universe->spawnActor<Asteroid>({ {-100.0, -300.0}, {0.5f, 200.f}, 0.f, 60.f , "Asteroid_3" });
+
+	universe->beginPlay();
 
 	audio_manager->playMusic(0);
 	audio_manager->playSound(0);
@@ -101,6 +104,8 @@ int main()
 			break;
 		}
 	}
+
+	universe->endPlay();
 
 	// frees memory associated with renderer and window
 	SDL_DestroyRenderer(renderer);
