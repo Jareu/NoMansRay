@@ -1,13 +1,7 @@
 #include "Object.h"
 
 Object::Object(Universe& universe) : 
-	universe_{ universe },
-	position_{},
-	linear_velocity_{},
-	rotation_radians_{ ZERO_DECIMAL },
-	angular_velocity_{ ZERO_DECIMAL },
-	scale_{ ONE_DECIMAL, ONE_DECIMAL },
-	transform_changed_ { true }
+	universe_{ universe }
 { }
 
 void Object::beginPlay()
@@ -25,75 +19,17 @@ void Object::endPlay()
 
 }
 
-void Object::initialize(const SpawnParameters& spawn_parameters)
+void Object::initialize(const std::string& name)
 {
-	position_ = spawn_parameters.position;
-	linear_velocity_ = spawn_parameters.linear_velocity;
-	rotation_radians_ = spawn_parameters.rotation_radians;
-	angular_velocity_ = spawn_parameters.angular_velocity;
-	name_ = spawn_parameters.name;
+	name_ = name;
 }
 
 void Object::initialize()
 { }
 
-// Setters
-void Object::setPosition(const Vector2<decimal>& new_position)
-{
-	position_ = new_position;
-}
-
-void Object::setPosition(decimal x, decimal y)
-{
-	position_.set_x(x);
-	position_.set_y(y);
-}
-
-void Object::setLinearVelocity(decimal x, decimal y)
-{
-	linear_velocity_.set_x(x);
-	linear_velocity_.set_y(y);
-}
-
-void Object::setLinearVelocity(const Vector2<decimal>& new_linear_velocity)
-{
-	linear_velocity_ = new_linear_velocity;
-}
-
-void Object::setRotation(const decimal& new_rotation)
-{
-	rotation_radians_ = new_rotation;
-}
-
-void Object::setAngularVelocity(const decimal& new_angular_velocity)
-{
-	angular_velocity_ = new_angular_velocity;
-}
-
 void Object::setName(const std::string& name)
 {
 	name_ = name;
-}
-
-// Getters
-const Vector2<decimal>& Object::getPosition()
-{
-	return position_;
-}
-
-const Vector2<decimal>& Object::getLinearVelocity()
-{
-	return linear_velocity_;
-}
-
-const decimal& Object::getRotation()
-{
-	return rotation_radians_;
-}
-
-const decimal& Object::getAngularVelocity()
-{
-	return angular_velocity_;
 }
 
 const std::string Object::getName()

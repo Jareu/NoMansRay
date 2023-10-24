@@ -12,7 +12,7 @@ Actor* spawnActor(
 template <class T>
 Actor* Universe::spawnActor(const SpawnParameters& spawn_parameters)
 {
-	static_assert(std::is_convertible<T*, Actor*>::value, "Derived must inherit Base as public");
+	static_assert(std::is_convertible<T*, Actor*>::value, "Derived must inherit Actor as public");
 	Actor* new_actor = static_cast<Actor*>(new T(*this));
 	new_actor->initialize(spawn_parameters);
 	last_id_++;

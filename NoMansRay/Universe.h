@@ -44,8 +44,9 @@ public:
 
 	b2World* getPhysics();
 
+	void beginPlay();
+	void endPlay();
 	void tick();
-	void endExistance();
 };
 
 #include "Universe.inl"
