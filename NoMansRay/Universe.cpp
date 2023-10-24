@@ -64,15 +64,15 @@ void Universe::endPlay()
 	ActorIdMap::iterator it = actor_map_.begin();
 
 	while (it != actor_map_.end()) {
+		auto id = it->first;
 		auto actor = it->second;
+		it++;
 
 		if (actor) {
 			actor->endPlay();
 			delete actor;
-			actor_map_.erase(it->first);
+			actor_map_.erase(id);
 		}
-
-		it++;
 	}
 }
 
