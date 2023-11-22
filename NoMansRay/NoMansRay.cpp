@@ -22,6 +22,7 @@
 #include "maths.h"
 #include "IAudioManager.h"
 #include "AudioManagerFactory.h"
+#include "NoiseTest.h"
 
 int		main();
 void	handleEvents();
@@ -33,6 +34,11 @@ std::unique_ptr<IAudioManager> audio_manager;
 
 int main()
 {
+	{
+		auto noise_test = NoiseTest();
+		noise_test.test();
+	}
+
 	int SDL_RENDERER_FLAGS = 0;
 	int SDL_WINDOW_INDEX = -1;
 
