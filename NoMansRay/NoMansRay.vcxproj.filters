@@ -19,6 +19,9 @@
     <Filter Include="Audio">
       <UniqueIdentifier>{354301ba-0a87-48b3-95b5-803b4a4650a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tests">
+      <UniqueIdentifier>{f71def2d-f08c-4145-8ee0-f3a0e3cd8612}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="NoMansRay.cpp">
@@ -112,6 +115,9 @@
     </ClInclude>
     <ClInclude Include="AudioManagerFactory.h">
       <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="NoiseTest.h">
+      <Filter>Tests</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
