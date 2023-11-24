@@ -21,7 +21,7 @@ inline SDL_Renderer* renderer = nullptr;
 inline SDL_Window* window = nullptr;
 inline int global_volume = 0;
 
-typedef std::pair<uint32_t, uint32_t> Line;
+typedef std::pair<uint32_t, uint32_t> Line; // pair of vertex IDs 
 typedef std::vector<Line> LineVector;
 typedef std::vector<Vector2<decimal>> VertexVector;
 
