@@ -19,6 +19,7 @@
 #include "Universe.h"
 #include <memory>
 #include "Asteroid.h"
+#include "SpaceShip.h"
 #include "maths.h"
 #include "IAudioManager.h"
 #include "AudioManagerFactory.h"
@@ -91,10 +92,12 @@ int main()
 	SDL_ShowWindow(window);
 	SDL_RenderFillRect(renderer, NULL);
 
-	auto asteroid1 = universe->spawnActor<Asteroid>({ { 0.f, 0.f }, { 100.f, 100.f }, 0.f, 50.f, "Asteroid_1" });
+	auto asteroid1 = universe->spawnActor<Asteroid>({ { -500.f, -200.f }, { 100.f, 100.f }, 0.f, 50.f, "Asteroid_1" });
 	auto asteroid2 = universe->spawnActor<Asteroid>({ {-100.0, 300.0}, {-50.f, -100.f}, 0.f, 30.f , "Asteroid_2" });
 	auto asteroid3 = universe->spawnActor<Asteroid>({ {100.0, 300.0}, {0.5f, -30.f}, 0.f, 60.f , "Asteroid_3" });
 	auto asteroid4 = universe->spawnActor<Asteroid>({ {-100.0, -300.0}, {0.5f, 200.f}, 0.f, 60.f , "Asteroid_3" });
+
+	auto spaceship = universe->spawnActor<SpaceShip>({ { 0.f, 0.f }, { 0.f, 0.f }, 0.f, 0.f, "Ship" });
 
 	universe->beginPlay();
 
