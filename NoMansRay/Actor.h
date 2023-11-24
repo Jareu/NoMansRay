@@ -42,10 +42,10 @@ public:
 	virtual eGraphicType getGraphicType() const;
 	virtual const LineVector& getLines() const;
 
-	virtual const Vector2<decimal>& getPosition();
-	virtual const Vector2<decimal>& getLinearVelocity();
-	virtual const decimal& getRotation();
-	virtual const decimal& getAngularVelocity();
+	virtual const Vector2<decimal>& getPosition() const;
+	virtual const Vector2<decimal>& getLinearVelocity() const;
+	virtual const decimal& getRotation() const;
+	virtual const decimal& getAngularVelocity() const;
 
 	// Setters
 	virtual void setPosition(const Vector2<decimal>& new_position);

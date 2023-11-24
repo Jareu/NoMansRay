@@ -183,22 +183,22 @@ void Actor::setAngularVelocity(const decimal& new_angular_velocity)
 }
 
 // Getters
-const Vector2<decimal>& Actor::getPosition()
+const Vector2<decimal>& Actor::getPosition() const
 {
 	return position_;
 }
 
-const Vector2<decimal>& Actor::getLinearVelocity()
+const Vector2<decimal>& Actor::getLinearVelocity() const
 {
 	return linear_velocity_;
 }
 
-const decimal& Actor::getRotation()
+const decimal& Actor::getRotation() const
 {
 	return rotation_radians_;
 }
 
-const decimal& Actor::getAngularVelocity()
+const decimal& Actor::getAngularVelocity() const
 {
 	return angular_velocity_;
 }
