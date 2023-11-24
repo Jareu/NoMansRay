@@ -7,13 +7,11 @@
 
 class Actor : public Object
 {
+private:
+	void check_initial_condition();
 protected:
-	VertexVector vertices_;
-	VertexVector vertices_transformed_;
-	LineVector lines_;
-	eGraphicType graphic_type_;
-	bool vertex_transforms_valid_;
-
+	// Physics
+	bool physics_initial_conditions_applied_ = false;
 	b2BodyDef physics_body_def_;
 	b2Body* physics_body_;
 	b2PolygonShape physics_shape_;
@@ -21,6 +19,12 @@ protected:
 	decimal density_;
 	decimal friction_;
 	decimal restitution_;
+
+	VertexVector vertices_;
+	VertexVector vertices_transformed_;
+	LineVector lines_;
+	eGraphicType graphic_type_;
+	bool vertex_transforms_valid_;
 	Vector2<decimal> position_;
 	Vector2<decimal> linear_velocity_;
 	decimal rotation_radians_;
