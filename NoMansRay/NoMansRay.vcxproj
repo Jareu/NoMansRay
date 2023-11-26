@@ -198,6 +198,7 @@ Xcopy /y $(SolutionDir)audio $(OutDir)audio /E /C /I</Command>
     <ClCompile Include="Thruster.cpp" />
     <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Universe.cpp" />
+    <ClCompile Include="utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
@@ -206,6 +207,7 @@ Xcopy /y $(SolutionDir)audio $(OutDir)audio /E /C /I</Command>
     <ClInclude Include="Delaunay.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="graphics.h" />
+    <ClInclude Include="utilities.h" />
     <ClInclude Include="IAudioManager.h" />
     <ClInclude Include="maths.h" />
     <ClInclude Include="NoiseTest.h" />

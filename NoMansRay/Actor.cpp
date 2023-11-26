@@ -83,12 +83,22 @@ void Actor::updatePhysics(decimal seconds_elapsed)
 		b2Vec2 position = physics_body_->GetPosition();
 		setPosition({ position.x, position.y });
 		setRotation(physics_body_->GetAngle());
+
+		check_initial_condition();
 	}
 	else {
 		setPosition(getPosition() + getLinearVelocity() * seconds_elapsed);
 		setRotation(getRotation() + getAngularVelocity() * seconds_elapsed);
 	}
+}
 
+void Actor::check_initial_condition()
+{
+	if (!physics_initial_conditions_applied_) {
+		physics_body_->ApplyLinearImpulseToCenter({ physics_body_->GetMass() * linear_velocity_.x(), physics_body_->GetMass() * linear_velocity_.y() }, true);
+		physics_body_->ApplyAngularImpulse(physics_body_->GetMass() * angular_velocity_, true);
+		physics_initial_conditions_applied_ = true;
+	}
 }
 
 // In order to work with Box2D shapes, vertices should be added clockwise
@@ -183,22 +193,22 @@ void Actor::setAngularVelocity(const decimal& new_angular_velocity)
 }
 
 // Getters
-const Vector2<decimal>& Actor::getPosition()
+const Vector2<decimal>& Actor::getPosition() const
 {
 	return position_;
 }
 
-const Vector2<decimal>& Actor::getLinearVelocity()
+const Vector2<decimal>& Actor::getLinearVelocity() const
 {
 	return linear_velocity_;
 }
 
-const decimal& Actor::getRotation()
+const decimal& Actor::getRotation() const
 {
 	return rotation_radians_;
 }
 
-const decimal& Actor::getAngularVelocity()
+const decimal& Actor::getAngularVelocity() const
 {
 	return angular_velocity_;
 }
