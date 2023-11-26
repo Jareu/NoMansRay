@@ -32,6 +32,12 @@ void Actor::initialize(const SpawnParameters& spawn_parameters)
 	rotation_radians_ = spawn_parameters.rotation_radians;
 	angular_velocity_ = spawn_parameters.angular_velocity;
 	name_ = spawn_parameters.name;
+	initialize();
+}
+
+void Actor::initialize()
+{
+
 }
 
 void Actor::initializePhysics()

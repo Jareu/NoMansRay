@@ -63,6 +63,12 @@
     <ClCompile Include="SdlMixerAudioManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="utilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameInput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="globals.h">
@@ -118,6 +124,15 @@
     </ClInclude>
     <ClInclude Include="NoiseTest.h">
       <Filter>Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="utilities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IInput.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameInput.h">
+      <Filter>Classes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

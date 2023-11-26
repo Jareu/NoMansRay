@@ -29,6 +29,11 @@ void Asteroid::endPlay()
 
 }
 
+void Asteroid::initialize()
+{
+	generate();
+}
+
 // Generate 
 void Asteroid::generate()
 {
@@ -133,15 +138,4 @@ void Asteroid::addLinesFromTriangles(const std::vector<Triangle>& triangles)
 			}
 		}
 	}
-}
-
-void Asteroid::initialize(const SpawnParameters& spawn_parameters)
-{
-	Actor::initialize(spawn_parameters);
-	initialize();
-}
-
-void Asteroid::initialize()
-{
-	generate();
 }

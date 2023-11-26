@@ -35,6 +35,7 @@ public:
 	~Actor() = default;
 
 	virtual void initialize(const SpawnParameters& spawn_parameters);
+	virtual void initialize();
 
 	// Getters
 	virtual const VertexVector& getVertices();

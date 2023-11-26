@@ -6,6 +6,8 @@ class Thruster : Actor
 private:
 	float throttle_;
 
+	void update_thrust();
+	void generate();
 public:
 	const decimal MAX_THRUST;
 
@@ -13,6 +15,9 @@ public:
 	Thruster(Universe& universe, float max_thrust);
 	~Thruster() = default;
 
-	void setThrottle(float throttle);
-	float getThrottle();
+	void initialize() override;
+	void setThrottle(decimal throttle);
+	decimal getThrottle() const;
+	Vector2<decimal> getThrust() const;
+	virtual void setRotation(const decimal& new_rotation) override;
 };
