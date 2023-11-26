@@ -2,6 +2,7 @@
 #include "maths.h"
 #include "Delaunay.h"
 #include "Universe.h"
+#include "utilities.h"
 
 #include <cstdlib>
 #include <cmath>
@@ -52,10 +53,7 @@ void Asteroid::generate()
 
 	for (uint16_t i = 0; i < NUM_VERTICES; i++) {
 		angle += (2 * M_PI * angle_slices[i]) / slice_total;
-		vertices_.emplace_back(Vector2<decimal>{
-			static_cast<decimal>(radii[i] * std::cos(angle)),
-			static_cast<decimal>(radii[i] * std::sin(angle))
-		});
+		utilities::add_vertex_to_vector(vertices_, radii[i] * std::cos(angle), radii[i] * std::sin(angle));
 	}
 
 	triangulate();
@@ -102,18 +100,6 @@ void Asteroid::triangulate()
 		fixture_def.friction = friction_;
 		fixture_def.restitution = restitution_;
 		physics_body_->CreateFixture(&fixture_def);
-	}
-}
-
-
-void Asteroid::updatePhysics(decimal seconds_elapsed)
-{
-	Actor::updatePhysics(seconds_elapsed);
-
-	if (!physics_is_setup_) {
-		physics_body_->ApplyLinearImpulseToCenter({ physics_body_->GetMass() * linear_velocity_.x(), physics_body_->GetMass() * linear_velocity_.y() }, true);
-		physics_body_->ApplyAngularImpulse(physics_body_->GetMass() * angular_velocity_, true);
-		physics_is_setup_ = true;
 	}
 }
 

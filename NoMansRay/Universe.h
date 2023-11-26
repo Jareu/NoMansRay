@@ -4,6 +4,7 @@
 #include <random>
 #include <box2d.h>
 
+#include "IInput.h"
 #include "Actor.h"
 #include "types.h"
 
@@ -19,7 +20,7 @@ private:
 	int RANDOM_SEED;
 	PhysicsSettings physics_settings_;
 	b2World physics;
-
+	std::shared_ptr<Input> input;
 public:
 	Universe() = delete;
 	Universe(const int seed);

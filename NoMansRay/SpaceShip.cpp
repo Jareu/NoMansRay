@@ -1,4 +1,7 @@
 #include "SpaceShip.h"
+#include "utilities.h"
+#include "Universe.h"
+#include "maths.h"
 
 SpaceShip::SpaceShip(Universe& universe) : Actor(universe)
 {
@@ -9,6 +12,7 @@ void SpaceShip::initialize()
 {
 	generate();
 	createPhysicsBody();
+
 	for (auto& thruster : thrusters_)
 	{
 		thruster.setThrottle(1.0f);

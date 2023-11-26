@@ -11,12 +11,12 @@ Actor::Actor(Universe& universe) :
 	graphic_type_{ eGraphicType::VECTOR },
 	vertex_transforms_valid_{ false },
 	physics_body_def_{},
-	physics_body_{nullptr},
+	physics_body_{ nullptr },
 	physics_shape_{},
 	physics_fixture_def_{},
-	density_{0.f},
-	friction_{0.f},
-	restitution_{0.f},
+	density_{ 0.f },
+	friction_{ 0.f },
+	restitution_{ 0.f },
 	position_{},
 	linear_velocity_{},
 	rotation_radians_{ ZERO_DECIMAL },
@@ -32,13 +32,12 @@ void Actor::initialize(const SpawnParameters& spawn_parameters)
 	rotation_radians_ = spawn_parameters.rotation_radians;
 	angular_velocity_ = spawn_parameters.angular_velocity;
 	name_ = spawn_parameters.name;
+
 	initialize();
 }
 
 void Actor::initialize()
-{
-
-}
+{ }
 
 void Actor::initializePhysics()
 { }
@@ -64,7 +63,7 @@ void Actor::initializePhysics(b2BodyType bodyType, decimal density, decimal fric
 		std::cout << "no shape from which to create physics." << std::endl;
 		return;
 	}
-	
+
 	b2Hull poly_hull;
 	poly_hull.count = static_cast<int32>(std::min(BOX2D_MAX_VERTICES_IN_POLYGON, lines_.size()));
 
@@ -80,7 +79,7 @@ void Actor::initializePhysics(b2BodyType bodyType, decimal density, decimal fric
 	physics_fixture_def_.friction = friction_;
 	physics_fixture_def_.restitution = restitution_;
 
-	physics_body_->CreateFixture( &physics_fixture_def_ );
+	physics_body_->CreateFixture(&physics_fixture_def_);
 }
 
 void Actor::updatePhysics(decimal seconds_elapsed)
@@ -89,12 +88,22 @@ void Actor::updatePhysics(decimal seconds_elapsed)
 		b2Vec2 position = physics_body_->GetPosition();
 		setPosition({ position.x, position.y });
 		setRotation(physics_body_->GetAngle());
+
+		check_initial_condition();
 	}
 	else {
 		setPosition(getPosition() + getLinearVelocity() * seconds_elapsed);
 		setRotation(getRotation() + getAngularVelocity() * seconds_elapsed);
 	}
+}
 
+void Actor::check_initial_condition()
+{
+	if (!physics_initial_conditions_applied_) {
+		physics_body_->ApplyLinearImpulseToCenter({ physics_body_->GetMass() * linear_velocity_.x(), physics_body_->GetMass() * linear_velocity_.y() }, true);
+		physics_body_->ApplyAngularImpulse(physics_body_->GetMass() * angular_velocity_, true);
+		physics_initial_conditions_applied_ = true;
+	}
 }
 
 // In order to work with Box2D shapes, vertices should be added clockwise
@@ -143,7 +152,7 @@ eGraphicType Actor::getGraphicType() const
 void Actor::updateVertexTransforms()
 {
 	vertices_transformed_.clear();
-	for (const auto& vertex : vertices_){
+	for (const auto& vertex : vertices_) {
 		vertices_transformed_.emplace_back(
 			maths::rotate(vertex, rotation_radians_)
 		);
@@ -189,22 +198,22 @@ void Actor::setAngularVelocity(const decimal& new_angular_velocity)
 }
 
 // Getters
-const Vector2<decimal>& Actor::getPosition()
+const Vector2<decimal>& Actor::getPosition() const
 {
 	return position_;
 }
 
-const Vector2<decimal>& Actor::getLinearVelocity()
+const Vector2<decimal>& Actor::getLinearVelocity() const
 {
 	return linear_velocity_;
 }
 
-const decimal& Actor::getRotation()
+const decimal& Actor::getRotation() const
 {
 	return rotation_radians_;
 }
 
-const decimal& Actor::getAngularVelocity()
+const decimal& Actor::getAngularVelocity() const
 {
 	return angular_velocity_;
 }

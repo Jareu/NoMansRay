@@ -4,8 +4,6 @@
 
 class SpaceShip : public Actor
 {
-protected:
-	std::vector<Thruster> thrusters_{};
 public:
 	SpaceShip() = delete;
 	SpaceShip(Universe& universe);
@@ -16,4 +14,9 @@ public:
 	void beginPlay() override;
 	void tick(decimal seconds_elapsed) override;
 	void endPlay() override;
+protected:
+	std::vector<Thruster> thrusters_{};
+private:
+	void generate();
+	void createPhysicsBody();
 };

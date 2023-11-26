@@ -1,6 +1,7 @@
 #include "Universe.h"
 #include "globals.h"
 #include <algorithm>
+#include "GameInput.h"
 
 Universe::Universe(const int seed) :
 	last_id_{ 0 },
@@ -24,6 +25,7 @@ void Universe::tick()
 	auto seconds_elapsed = std::chrono::duration_cast<std::chrono::microseconds>(now - last_tick_time_).count() / static_cast<decimal>(1'000'000.0);
 
 	physics.Step(seconds_elapsed, physics_settings_.velocity_iterations, physics_settings_.position_iterations);
+	physics.ClearForces();
 
 	ActorIdMap::iterator it = actor_map_.begin();
 	while (it != actor_map_.end()) {
@@ -36,8 +38,6 @@ void Universe::tick()
 
 		it++;
 	}
-
-	//physics.ClearForces();
 
 	last_tick_time_ = now;
 }

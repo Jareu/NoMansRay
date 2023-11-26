@@ -7,13 +7,11 @@
 
 class Actor : public Object
 {
+private:
+	void check_initial_condition();
 protected:
-	VertexVector vertices_;
-	VertexVector vertices_transformed_;
-	LineVector lines_;
-	eGraphicType graphic_type_;
-	bool vertex_transforms_valid_;
-
+	// Physics
+	bool physics_initial_conditions_applied_ = false;
 	b2BodyDef physics_body_def_;
 	b2Body* physics_body_;
 	b2PolygonShape physics_shape_;
@@ -21,6 +19,12 @@ protected:
 	decimal density_;
 	decimal friction_;
 	decimal restitution_;
+
+	VertexVector vertices_;
+	VertexVector vertices_transformed_;
+	LineVector lines_;
+	eGraphicType graphic_type_;
+	bool vertex_transforms_valid_;
 	Vector2<decimal> position_;
 	Vector2<decimal> linear_velocity_;
 	decimal rotation_radians_;
@@ -34,8 +38,8 @@ public:
 	Actor(Universe& universe);
 	~Actor() = default;
 
-	virtual void initialize(const SpawnParameters& spawn_parameters);
 	virtual void initialize();
+	virtual void initialize(const SpawnParameters& spawn_parameters);
 
 	// Getters
 	virtual const VertexVector& getVertices();
@@ -43,10 +47,10 @@ public:
 	virtual eGraphicType getGraphicType() const;
 	virtual const LineVector& getLines() const;
 
-	virtual const Vector2<decimal>& getPosition();
-	virtual const Vector2<decimal>& getLinearVelocity();
-	virtual const decimal& getRotation();
-	virtual const decimal& getAngularVelocity();
+	virtual const Vector2<decimal>& getPosition() const;
+	virtual const Vector2<decimal>& getLinearVelocity() const;
+	virtual const decimal& getRotation() const;
+	virtual const decimal& getAngularVelocity() const;
 
 	// Setters
 	virtual void setPosition(const Vector2<decimal>& new_position);
